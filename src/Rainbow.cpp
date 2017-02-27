@@ -14,18 +14,13 @@ Rainbow::Rainbow(int s) {
 void Rainbow::loop() {
   int t = millis() / (speed * 50);
   for (int i = 0; i < NUM_LEDS; i++) {
-    if (((i + t) % 6) == 0) {
-      leds[i] = CRGB::Red;
-    } else if (((i + t) % 6) == 1) {
-      leds[i] = CRGB::Orange;
-    } else if (((i + t) % 6) == 2) {
-      leds[i] = CRGB::Yellow;
-    } else if (((i + t) % 6) == 3) {
-      leds[i] = CRGB::Green;
-    } else if (((i + t) % 6) == 4) {
-      leds[i] = CRGB::Blue;
-    } else if (((i + t) % 6) == 5) {
-      leds[i] = CRGB::Purple;
+    switch ((i + t) % 6) {
+      case 0: leds[i] = CRGB::Red;    break;
+      case 1: leds[i] = CRGB::Orange; break;
+      case 2: leds[i] = CRGB::Yellow; break;
+      case 3: leds[i] = CRGB::Green;  break;
+      case 4: leds[i] = CRGB::Blue;   break;
+      case 5: leds[i] = CRGB::Purple; break;
     }
   }
   FastLED.show();
@@ -39,14 +34,10 @@ void Rainbow::clear() {
 }
 
 void Rainbow::sleeve(int buttonid) {
-  if (buttonid == 3) {
-    if (speed > 1) {
-      speed--;
-    }
-  } else if (buttonid == 4) {
-    if (speed < 10) {
-      speed++;
-    }
+  switch (buttonid) {
+    case 3: if (speed > 1)  { speed--; } break;
+    case 4: if (speed < 10) { speed++; } break;
+    default: break;
   }
   Serial.print("speed: ");
   Serial.println(speed);

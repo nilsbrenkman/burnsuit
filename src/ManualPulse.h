@@ -1,5 +1,5 @@
-#ifndef Rainbow_H
-#define Rainbow_H
+#ifndef ManualPulse_H
+#define ManualPulse_H
 
 #include "AbstractProgram.h"
 #include "application.h"
@@ -7,9 +7,9 @@
 
 FASTLED_USING_NAMESPACE;
 
-class Rainbow : public AbstractProgram {
+class ManualPulse : public AbstractProgram {
   public:
-    Rainbow(int speed);
+    ManualPulse();
     void loop();
     void clear();
     void sleeve(int buttonid);
