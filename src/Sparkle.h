@@ -1,5 +1,5 @@
-#ifndef Rainbow_H
-#define Rainbow_H
+#ifndef Sparkle_H
+#define Sparkle_H
 
 #include "AbstractProgram.h"
 #include "application.h"
@@ -7,15 +7,21 @@
 
 FASTLED_USING_NAMESPACE;
 
-class Rainbow : public AbstractProgram {
+enum State { on, off };
+enum Mode { white, color };
+
+class Sparkle : public AbstractProgram {
   public:
-    Rainbow(int speed);
+    Sparkle();
     void loop();
     void clear();
     void sleeve(int buttonid);
   private:
     CRGB leds[4];
-    int speed;
+    int led;
+    State state;
+    Mode mode;
+    long nextEvent;
 };
 
 #endif

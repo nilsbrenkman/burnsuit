@@ -10,6 +10,8 @@
 #include "AbstractProgram.h"
 #include "Program1.h"
 #include "Rainbow.h"
+#include "ManualPulse.h"
+#include "Sparkle.h"
 
 AbstractProgram *program;
 int LED = D7;
@@ -39,14 +41,14 @@ void doKeypad() {
       program->clear();
       delete program;
     }
-    if (buttonid == 0) {
-      program = NULL;
-    } else if (buttonid == 1) {
-      program = new Program1(500, LED);
-    } else if (buttonid == 2) {
-      program = new Program1(200, LED);
-    } else if (buttonid == 3) {
-      program = new Rainbow(5);
+    switch (buttonid) {
+      case 0: program = NULL;                   break;
+      case 1: program = new Program1(500, LED); break;
+      case 2: program = new Program1(200, LED); break;
+      case 3: program = new Rainbow(5);         break;
+      case 4: program = new ManualPulse();      break;
+      case 5: program = new Sparkle();          break;
+      default: break;
     }
     Serial.print("keypad button: ");
     Serial.println(buttonid);
