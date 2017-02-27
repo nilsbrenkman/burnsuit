@@ -60,6 +60,7 @@ void Sparkle::loop() {
 }
 
 void Sparkle::clear() {
+  FastLED.setBrightness(255);
   if (state == on) {
     leds[led] = CRGB::Black;
     FastLED.show();
