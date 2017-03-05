@@ -9,6 +9,7 @@
 Rainbow::Rainbow(int s) {
   FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   speed = s;
+  brightness = 5;
 }
 
 void Rainbow::loop() {
@@ -30,6 +31,7 @@ void Rainbow::clear() {
   for (int i = 0; i < NUM_LEDS; i++) {
     leds[i] = CRGB::Black;
   }
+  FastLED.setBrightness(255);
   FastLED.show();
 }
 
@@ -37,8 +39,17 @@ void Rainbow::sleeve(int buttonid) {
   switch (buttonid) {
     case 3: if (speed > 1)  { speed--; } break;
     case 4: if (speed < 10) { speed++; } break;
+    case 5: setBrightness(5);           break;
+    case 6: if (brightness < 5) { setBrightness(brightness+1); } break;
+    case 7: if (brightness > 1) { setBrightness(brightness-1); } break;
     default: break;
   }
-  Serial.print("speed: ");
-  Serial.println(speed);
+}
+
+void Rainbow::setBrightness(int b) {
+  brightness = b;
+  Serial.print("brightness: ");
+  Serial.println(brightness);
+  FastLED.setBrightness(255 * b / 5.0);
+  FastLED.show();
 }

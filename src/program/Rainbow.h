@@ -14,8 +14,10 @@ class Rainbow : public AbstractProgram {
     void clear();
     void sleeve(int buttonid);
   private:
+    void setBrightness(int b);
     CRGB leds[4];
     int speed;
+    int brightness;
 };
 
 #endif
