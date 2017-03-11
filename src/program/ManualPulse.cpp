@@ -37,3 +37,7 @@ void ManualPulse::sleeve(int buttonid) {
   }
   FastLED.show();
 }
+
+void ManualPulse::infrared(int value) {
+  sleeve(value);
+}

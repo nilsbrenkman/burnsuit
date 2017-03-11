@@ -5,11 +5,12 @@
 const std::array<int,2> afrored::BURST_LENGTH = {300,600};
 const std::array<int,4> afrored::START_SEQ = {300,700,500,500};
 const std::array<int,1> afrored::END_SEQ = {800};
-const int afrored::COOL_DOWN_TIME = 450;
+const int afrored::BURST_LOW_TIME = 450;
 const int afrored::BURST_TIME_OUT = 1000;
 const int afrored::PWM_RES = 8;
 const int afrored::PWM_DUTY = 127;
-const int afrored::TIME_TOL = 120;
+const int afrored::TIME_TOL = 150;
+const int afrored::COOLDOWN = 100;
 
 afrored::afrored(const int msg_length, const int carrier_frequency) :
   carrier_frequency(carrier_frequency),
@@ -18,19 +19,31 @@ afrored::afrored(const int msg_length, const int carrier_frequency) :
   num_bursts_start = START_SEQ.size();
   num_bursts_end =  END_SEQ.size();
   num_bursts = num_bursts_start + msg_length * 2 + num_bursts_end;
+  time_last_msg = 0;
+
+  signal_in.resize(num_bursts);
 
   // make sure no pin is used withouth attaching first
   pin_receiver = -1;
   pin_led = -1;
 }
 
-void afrored::attachreceiver(const int pin_receiver)
+void afrored::ISR()
+{
+  detachInterrupt(pin_receiver);
+  listen();
+}
+
+void afrored::attachreceiver(const int pin_receiver, raw_interrupt_handler_t ISR_wrapper)
 {
   this->pin_receiver = pin_receiver;
+  this->ISR_wrapper = ISR_wrapper;
   isnewmsg = false;
   signal_in.reserve(num_bursts);
   std::fill(signal_in.begin(), signal_in.end(), 0);
   pinMode(pin_receiver, INPUT);
+
+  attachInterrupt( pin_receiver, ISR_wrapper, CHANGE);
 }
 
 void afrored::attachtransmitter(const int pin_led)
@@ -49,7 +62,7 @@ void afrored::sendmsg(int data)
   for (int i = 0; i<msg_length; i++)
   {
     signal_out.push_back (BURST_LENGTH[(data >> i) & 1]);
-    signal_out.push_back (COOL_DOWN_TIME);
+    signal_out.push_back (BURST_LOW_TIME);
   }
   signal_out.insert( signal_out.end(), END_SEQ.begin(), END_SEQ.end() );
 
@@ -73,6 +86,8 @@ void afrored::listen()
   long time_last_change = micros();
   int input;
   int input_prev = digitalRead(pin_receiver);
+
+  std::fill(signal_in.begin(), signal_in.end(), 0);
 
   while(isreceiving)
   {
@@ -111,7 +126,7 @@ int afrored::debugmsg()
   }
   for (int i = 0; i < msg_length; i++) // check cool down pulses
   {
-    if(!tolcheck(signal_in[num_bursts_start + 2*i + 1], COOL_DOWN_TIME))
+    if(!tolcheck(signal_in[num_bursts_start + 2*i + 1], BURST_LOW_TIME))
       return -3;
   }
   for (int i = 0; i < msg_length; i++) // check data pulses
@@ -135,6 +150,8 @@ void afrored::printrawinput()
 
 bool afrored::checkmsg()
 {
+  isnewmsg = false;
+  time_last_msg = millis();
   return (debugmsg() == 1);
 }
 
@@ -142,6 +159,7 @@ int afrored::getmsg()
 {
   isnewmsg = false;
   int data = 0;
+  time_last_msg = millis();
 
   for (int i = 0; i < msg_length; i++)
   {
@@ -157,4 +175,12 @@ bool afrored::tolcheck(int measured_pulse, int intended_pulse)
   bool istoohigh = measured_pulse - TIME_TOL > intended_pulse;
   bool istoolow = measured_pulse + TIME_TOL < intended_pulse;
   return !istoohigh && !istoolow;
+}
+
+void afrored::updateISR()
+{
+  if(!isnewmsg && (millis() > time_last_msg + COOLDOWN))
+  {
+    attachInterrupt(pin_receiver, ISR_wrapper, CHANGE);
+  }
 }

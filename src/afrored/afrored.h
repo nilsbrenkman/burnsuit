@@ -19,17 +19,18 @@ class afrored
   int carrier_frequency;
   int pin_led;
   int pin_receiver;
+  raw_interrupt_handler_t ISR_wrapper;
   int msg_length;
   int num_bursts_start;
   int num_bursts_end;
   int num_bursts;
-  
-  
+  int time_last_msg;
+  static const int COOLDOWN;
   std::vector<int> signal_in;
   static const std::array<int,2> BURST_LENGTH;
   static const std::array<int,4> START_SEQ;
   static const std::array<int,1> END_SEQ;
-  static const int COOL_DOWN_TIME;
+  static const int BURST_LOW_TIME;
   static const int BURST_TIME_OUT;
   static const int PWM_RES;
   static const int PWM_DUTY;
@@ -37,7 +38,8 @@ class afrored
 
   public:
   afrored(const int msg_length, const int carrier_frequency);
-  void attachreceiver(const int pin_receiver);
+  void ISR();
+  void attachreceiver(const int pin_receiver, raw_interrupt_handler_t ISR_wrapper);
   void attachtransmitter(const int pin_receiver);
   void sendmsg(int data);
   void listen();
@@ -46,5 +48,6 @@ class afrored
   int  debugmsg();
   void printrawinput();
   bool isnewmsg;
+  void updateISR();
 
 };
