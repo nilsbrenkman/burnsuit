@@ -12,6 +12,7 @@
 #include "Rainbow.h"
 #include "ManualPulse.h"
 #include "Sparkle.h"
+#include "Slave.h"
 
 AbstractProgram *program;
 int LED = D7;
@@ -48,6 +49,7 @@ void doKeypad() {
       case 3: program = new Rainbow(5);         break;
       case 4: program = new ManualPulse();      break;
       case 5: program = new Sparkle();          break;
+      case 6: program = new Slave();            break;
       default: break;
     }
     Serial.print("keypad button: ");

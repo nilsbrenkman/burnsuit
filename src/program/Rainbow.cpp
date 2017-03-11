@@ -39,7 +39,7 @@ void Rainbow::sleeve(int buttonid) {
   switch (buttonid) {
     case 3: if (speed > 1)  { speed--; } break;
     case 4: if (speed < 10) { speed++; } break;
-    case 5: setBrightness(5);           break;
+    case 5: setBrightness(5);            break;
     case 6: if (brightness < 5) { setBrightness(brightness+1); } break;
     case 7: if (brightness > 1) { setBrightness(brightness-1); } break;
     default: break;
@@ -50,6 +50,6 @@ void Rainbow::setBrightness(int b) {
   brightness = b;
   Serial.print("brightness: ");
   Serial.println(brightness);
-  FastLED.setBrightness(255 * b / 5.0);
+  FastLED.setBrightness( pow((b / 5.0), 2) * 255 );
   FastLED.show();
 }
