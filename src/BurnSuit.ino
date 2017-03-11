@@ -5,7 +5,6 @@
 * Date:
 */
 
-#include <math.h>
 #include "PCF8574_keypad.h"
 #include "PCF8574_mombutt.h"
 #include "afrored.h"
