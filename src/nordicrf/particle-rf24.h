@@ -15,6 +15,8 @@
 #ifndef __RF24_H__
 #define __RF24_H__
 
+#include <stdint.h>
+
 /**
  * Power Amplifier level.
  *
@@ -1818,4 +1820,3 @@ private:
  */
 
 #endif // __RF24_H__
-

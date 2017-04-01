@@ -7,6 +7,7 @@ class AbstractProgram {
      virtual void clear();
      virtual void sleeve(int buttonid);
      virtual void infrared(int value);
+     virtual void mode(char letter);
 };
 
 #endif
