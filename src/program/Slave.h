@@ -9,13 +9,11 @@ FASTLED_USING_NAMESPACE;
 
 class Slave : public AbstractProgram {
   public:
-    Slave();
-    void loop();
-    void clear();
-    void sleeve(int buttonid);
+    Slave(int led);
+    void rf(unsigned long data);
   private:
-    CRGB leds[4];
-    int brightness;
+    void blink(int i);
+    int led;
 };
 
 #endif

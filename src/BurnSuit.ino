@@ -11,6 +11,7 @@
 #include "afrored.h"
 #include "particle-rf24.h"
 #include "Constants.h"
+#include "LedManager.h"
 #include "AbstractProgram.h"
 #include "Program1.h"
 #include "Rainbow.h"
@@ -36,21 +37,22 @@ void ISR_sleevebuttons() { sleevebuttons.ISR(); } //wrapper function
 afrored infrared(IR_MSG_LENGTH, IR_CARRIER_FREQ);
 void ISR_infrared() { infrared.ISR(); }
 RF24 radio(A6, A2);
+LedManager ledManager();
 
 void setup() {
   Serial.begin(9600);
   String deviceId = System.deviceID();
   Serial.print("My id: ");
   Serial.println(deviceId);
-  for (int i = 0; i < sizeof(DEVICEIDS); i++) {
+  for (int i = 0; i < NUMBEROFDEVICES; i++) {
     if (DEVICEIDS[i] == deviceId) {
       myId = i;
     }
   }
 
-  attachInterrupt(PIN_IR_RECEIVER, ISR_infrared, CHANGE);
+  /*attachInterrupt(PIN_IR_RECEIVER, ISR_infrared, CHANGE);
   infrared.attachreceiver(PIN_IR_RECEIVER, ISR_infrared);
-  infrared.attachtransmitter(PIN_IR_LED);
+  infrared.attachtransmitter(PIN_IR_LED);*/
 
   radio.begin();
   radio.setPALevel(RF24_PA_LOW);
@@ -62,9 +64,9 @@ void setup() {
 void loop() {
   doKeypad();
   doSleeveBoard();
-  doInfraredReceive();
-  doSerialRead();
-  doRfReceive();
+  /*doInfraredReceive();*/
+  /*doSerialRead();*/
+  /*doRfReceive();*/
   if (program != NULL) {
     program->loop();
   }
@@ -73,24 +75,27 @@ void loop() {
 void doKeypad() {
   if (controlpanel.buttonpressed()) {
     int buttonid = controlpanel.getbutton();
+    switch (buttonid) {
+      case 12:  if (program != NULL) { program->mode('A'); } return;
+      case 13:  if (program != NULL) { program->mode('B'); } return;
+      case 14:  if (program != NULL) { program->mode('C'); } return;
+      case 15:  if (program != NULL) { program->mode('D'); } return;
+      default: break;
+    }
     if (program != NULL) {
       program->clear();
       delete program;
     }
     switch (buttonid) {
-      case 0: program = NULL;                   break;
+      case 0: program = NULL;                      break;
       case 1: program = new Master(&radio, myId);  break;
       /*case 2: program = new Program1(200, LED); break;*/
-      case 3: program = new Rainbow(5);         break;
-      case 4: program = new ManualPulse();      break;
-      case 5: program = new Sparkle();          break;
-      case 6: program = new Slave();            break;
-      case 12:  if (program != NULL) { program->mode('A'); } break;
-      case 13:  if (program != NULL) { program->mode('B'); } break;
-      case 14:  if (program != NULL) { program->mode('C'); } break;
-      case 15:  if (program != NULL) { program->mode('D'); } break;
+      case 3: program = new Rainbow(5);            break;
+      case 4: program = new ManualPulse();         break;
+      case 5: program = new Sparkle();             break;
       default: break;
     }
+    program->init(&ledManager);
     Serial.print("keypad button: ");
     Serial.println(buttonid);
   }
@@ -134,6 +139,22 @@ void doRfReceive() {
       radio.read(&data, sizeof(unsigned long));
     }
     Serial.println(data);
+    switch (data) {
+      case 1:
+        if (program != NULL) {
+          program->clear();
+          delete program;
+        }
+        program = new Slave(D7);
+        program->init(&ledManager);
+        break;
+      default:
+        if (program != NULL) {
+          program->rf(data);
+        }
+        break;
+    }
+
   }
 }
 

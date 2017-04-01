@@ -6,31 +6,23 @@
 #define CLOCK_PIN A0
 #define COLOR_ORDER BGR
 
-Slave::Slave() {
-  FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
-  brightness = 0;
-  for (int i = 0; i < NUM_LEDS; i++) {
-    leds[i] = CRGB::White;
-  }
-  FastLED.setBrightness(brightness);
-  FastLED.show();
+Slave::Slave(int l) {
+  Serial.println("Going into slave mode");
+  led = l;
 }
 
-void Slave::loop() {
-  int t = (millis() / 200) % 255;
-  if (t != brightness) {
-    brightness = t;
-    FastLED.setBrightness(255);
-    FastLED.show();
-    Serial.print("brightness: ");
-    Serial.println(brightness);
+void Slave::rf(unsigned long data) {
+  int program = data / 10;
+  switch (program) {
+    case 1: blink(data % 10); break;
+    default: break;
   }
 }
-
-void Slave::clear() {
-  // do nothing
-}
-
-void Slave::sleeve(int buttonid) {
-  // do nothing
+void Slave::blink(int i) {
+  Serial.println(i);
+  if (i == 0) {
+    digitalWrite(led, 0);
+  } else if (i == 1) {
+    digitalWrite(led, 1);
+  }
 }

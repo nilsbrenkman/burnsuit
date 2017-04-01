@@ -10,29 +10,20 @@ Rainbow::Rainbow(int s) {
   FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   speed = s;
   brightness = 5;
+  timeout = 0;
+  offset = 0;
 }
 
 void Rainbow::loop() {
-  int t = millis() / (speed * 50);
-  for (int i = 0; i < NUM_LEDS; i++) {
-    switch ((i + t) % 6) {
-      case 0: leds[i] = CRGB::Red;    break;
-      case 1: leds[i] = CRGB::Orange; break;
-      case 2: leds[i] = CRGB::Yellow; break;
-      case 3: leds[i] = CRGB::Green;  break;
-      case 4: leds[i] = CRGB::Blue;   break;
-      case 5: leds[i] = CRGB::Purple; break;
-    }
+  if (timeout < millis()) {
+    ledManager->doProgramWithOffset(offset);
+    timeout = millis() + 1100 - (100 * speed);
+    offset = (offset + 1) % 6;
   }
-  FastLED.show();
 }
 
 void Rainbow::clear() {
-  for (int i = 0; i < NUM_LEDS; i++) {
-    leds[i] = CRGB::Black;
-  }
-  FastLED.setBrightness(255);
-  FastLED.show();
+  ledManager->clearAll();
 }
 
 void Rainbow::sleeve(int buttonid) {

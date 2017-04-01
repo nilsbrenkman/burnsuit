@@ -10,8 +10,6 @@ class Master : public AbstractProgram {
   public:
     Master(RF24 * radio, int myId);
     void loop();
-    void clear();
-    void sleeve(int buttonid);
     void mode(char letter);
   private:
     RF24 * radio;
@@ -19,6 +17,8 @@ class Master : public AbstractProgram {
     bool slavePresent[NUMBEROFDEVICES];
     int numberOfSlaves;
     void registerSlaves();
+    long timeout;
+    bool blink;
 };
 
 #endif
