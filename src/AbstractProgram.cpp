@@ -1,5 +1,9 @@
 #include "AbstractProgram.h"
 
+void AbstractProgram::init(LedManager * lm) {
+  ledManager = lm;
+}
+
 void AbstractProgram::loop() {
   // do nothing
 }

@@ -11,6 +11,7 @@
 #include "afrored.h"
 #include "particle-rf24.h"
 #include "Constants.h"
+#include "LedManager.h"
 #include "AbstractProgram.h"
 #include "Program1.h"
 #include "Rainbow.h"
@@ -20,6 +21,7 @@
 #include "Slave.h"
 
 AbstractProgram * program;
+LedManager * ledManager;
 
 const int PIN_IR_RECEIVER = D7;
 const int PIN_IR_LED      = D2;
@@ -47,6 +49,8 @@ void setup() {
       myId = i;
     }
   }
+
+  ledManager = new LedManager();
 
   attachInterrupt(PIN_IR_RECEIVER, ISR_infrared, CHANGE);
   infrared.attachreceiver(PIN_IR_RECEIVER, ISR_infrared);
@@ -92,6 +96,9 @@ void doKeypad() {
       case 4: program = new ManualPulse();         break;
       case 5: program = new Sparkle();             break;
       default: break;
+    }
+    if (program != NULL) {
+      program->init(ledManager);
     }
     Serial.print("keypad button: ");
     Serial.println(buttonid);
@@ -143,6 +150,7 @@ void doRfReceive() {
           delete program;
         }
         program = new Slave();
+        program->init(ledManager);
         break;
       default:
         if (program != NULL) {

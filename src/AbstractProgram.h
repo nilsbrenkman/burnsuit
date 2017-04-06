@@ -1,14 +1,19 @@
 #ifndef AbstractProgram_H
 #define AbstractProgram_H
 
+#include "LedManager.h"
+
 class AbstractProgram {
   public:
-     virtual void loop();
-     virtual void clear();
-     virtual void sleeve(int buttonid);
-     virtual void infrared(int value);
-     virtual void mode(char letter);
-     virtual void rf(unsigned long data);
+    void init(LedManager * ledManager);
+    virtual void loop();
+    virtual void clear();
+    virtual void sleeve(int buttonid);
+    virtual void infrared(int value);
+    virtual void mode(char letter);
+    virtual void rf(unsigned long data);
+  protected:
+    LedManager * ledManager;
 };
 
 #endif
