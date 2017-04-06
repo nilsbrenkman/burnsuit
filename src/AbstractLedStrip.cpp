@@ -6,16 +6,12 @@ AbstractLedStrip::AbstractLedStrip(int s, int l, bool inv) {
   inverse = inv;
 }
 
-// void AbstractLedStrip::init(LedManager * lm) {
-//   ledManager = lm;
-// }
-
 void AbstractLedStrip::setLed(int i, CRGB color) {
-  // if (inverse) {
-  //   ledManager->setLed(start + size - i - 1, color);
-  // } else {
-  //   ledManager->setLed(start + i, color);
-  // }
+  /*if (inverse) {
+    ledManager->setLed(start + size - i - 1, color);
+  } else {
+    ledManager->setLed(start + i, color);
+  }*/
 }
 
 void AbstractLedStrip::doRainbow(int offset) {
