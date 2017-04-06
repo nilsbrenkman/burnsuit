@@ -16,7 +16,7 @@ class Master : public AbstractProgram {
   private:
     RF24 * radio;
     int myId;
-    bool slavePresent[NUMBEROFDEVICES];
+    bool slavePresent[NUMBER_OF_DEVICES];
     int numberOfSlaves;
     void registerSlaves();
 };

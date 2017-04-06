@@ -5,7 +5,7 @@ Master::Master(RF24 * r, int i) {
   myId = i;
   Serial.println("Master active");
   numberOfSlaves = 0;
-  for (int i = 0; i < NUMBEROFDEVICES; i++) {
+  for (int i = 0; i < NUMBER_OF_DEVICES; i++) {
     slavePresent[i] = false;
   }
 }
@@ -32,7 +32,7 @@ void Master::mode(char letter) {
 void Master::registerSlaves() {
   numberOfSlaves = 0;
   radio->stopListening();
-  for (int i = 0; i < NUMBEROFDEVICES; i++) {
+  for (int i = 0; i < NUMBER_OF_DEVICES; i++) {
     if (i != myId) {
       radio->openWritingPipe(ADDRESSES[i]);
       unsigned long data_send = (unsigned long) 1;

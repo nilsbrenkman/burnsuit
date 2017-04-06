@@ -8,6 +8,7 @@ class AbstractProgram {
      virtual void sleeve(int buttonid);
      virtual void infrared(int value);
      virtual void mode(char letter);
+     virtual void rf(unsigned long data);
 };
 
 #endif

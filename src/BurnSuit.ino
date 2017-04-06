@@ -19,7 +19,7 @@
 #include "Master.h"
 #include "Slave.h"
 
-AbstractProgram *program;
+AbstractProgram * program;
 
 const int PIN_IR_RECEIVER = D7;
 const int PIN_IR_LED      = D2;
@@ -42,7 +42,7 @@ void setup() {
   String deviceId = System.deviceID();
   Serial.print("My id: ");
   Serial.println(deviceId);
-  for (int i = 0; i < sizeof(DEVICEIDS); i++) {
+  for (int i = 0; i < NUMBER_OF_DEVICES; i++) {
     if (DEVICEIDS[i] == deviceId) {
       myId = i;
     }
@@ -73,22 +73,24 @@ void loop() {
 void doKeypad() {
   if (controlpanel.buttonpressed()) {
     int buttonid = controlpanel.getbutton();
+    switch (buttonid) {
+      case 12:  if (program != NULL) { program->mode('A'); } return;
+      case 13:  if (program != NULL) { program->mode('B'); } return;
+      case 14:  if (program != NULL) { program->mode('C'); } return;
+      case 15:  if (program != NULL) { program->mode('D'); } return;
+      default: break;
+    }
     if (program != NULL) {
       program->clear();
       delete program;
     }
     switch (buttonid) {
-      case 0: program = NULL;                   break;
+      case 0: program = NULL;                      break;
       case 1: program = new Master(&radio, myId);  break;
       /*case 2: program = new Program1(200, LED); break;*/
-      case 3: program = new Rainbow(5);         break;
-      case 4: program = new ManualPulse();      break;
-      case 5: program = new Sparkle();          break;
-      case 6: program = new Slave();            break;
-      case 12:  if (program != NULL) { program->mode('A'); } break;
-      case 13:  if (program != NULL) { program->mode('B'); } break;
-      case 14:  if (program != NULL) { program->mode('C'); } break;
-      case 15:  if (program != NULL) { program->mode('D'); } break;
+      case 3: program = new Rainbow(5);            break;
+      case 4: program = new ManualPulse();         break;
+      case 5: program = new Sparkle();             break;
       default: break;
     }
     Serial.print("keypad button: ");
@@ -134,6 +136,21 @@ void doRfReceive() {
       radio.read(&data, sizeof(unsigned long));
     }
     Serial.println(data);
+    switch (data) {
+      case 1:
+        if (program != NULL) {
+          program->clear();
+          delete program;
+        }
+        program = new Slave();
+        break;
+      default:
+        if (program != NULL) {
+          program->rf(data);
+        }
+        break;
+    }
+
   }
 }
 
