@@ -24,6 +24,7 @@ class LedManager {
     bool doProgramWithOffset(int program, int offset, bool andOr);
   private:
     CRGB leds[NUMBER_OF_LEDS];
+    CRGB myOrange;
     AbstractLedStrip * ledStrip[NUMBER_OF_LEDSTRIPS];
     int brightness;
 };

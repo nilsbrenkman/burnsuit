@@ -8,6 +8,7 @@
 LedManager::LedManager() {
   FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUMBER_OF_LEDS);
   brightness = 5;
+  myOrange = blend(CRGB::Orange, CRGB::Red, 100);
 }
 
 void LedManager::setLedStrip(int i, AbstractLedStrip * ls) {
@@ -23,7 +24,7 @@ void LedManager::setLed(int led, int color) {
     case 0: setLedWithColor(led, CRGB::Black);  break;
     case 1: setLedWithColor(led, CRGB::White);  break;
     case 2: setLedWithColor(led, CRGB::Red);    break;
-    case 3: setLedWithColor(led, CRGB::Orange); break;
+    case 3: setLedWithColor(led, myOrange);     break;
     case 4: setLedWithColor(led, CRGB::Yellow); break;
     case 5: setLedWithColor(led, CRGB::Green);  break;
     case 6: setLedWithColor(led, CRGB::Blue);   break;

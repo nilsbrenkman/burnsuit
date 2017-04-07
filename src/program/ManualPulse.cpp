@@ -19,7 +19,6 @@ void ManualPulse::loop() {
     long now = millis();
     if (nextEvent < now) {
       offset++;
-      Serial.println(offset);
       if (ledManager->doProgramWithOffset(2, offset, true)) {
         state = 0;
       } else {
@@ -33,7 +32,6 @@ void ManualPulse::sleeve(int buttonid) {
   if (state == 0) {
     switch (buttonid) {
       case 3:   // explosion
-        Serial.println("Explosion");
         offset = 0;
         ledManager->doProgramWithOffset(2, offset, true);
         nextEvent = millis() + 50;
