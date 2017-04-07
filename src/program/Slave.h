@@ -7,11 +7,9 @@
 class Slave : public AbstractProgram {
   public:
     Slave();
-    void loop();
-    void clear();
-    void sleeve(int buttonid);
+    void rf(unsigned long data);
   private:
-    int brightness;
+    void doGroupRainbow(int offset);
 };
 
 #endif

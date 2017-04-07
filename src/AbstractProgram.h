@@ -12,6 +12,8 @@ class AbstractProgram {
     virtual void infrared(int value);
     virtual void mode(char letter);
     virtual void rf(unsigned long data);
+    virtual bool isMaster();
+    virtual void selectMasterMode(int buttonid);
   protected:
     LedManager * ledManager;
 };

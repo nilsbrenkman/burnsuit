@@ -10,15 +10,21 @@ class Master : public AbstractProgram {
   public:
     Master(RF24 * radio, int myId);
     void loop();
-    void clear();
     void sleeve(int buttonid);
     void mode(char letter);
+    bool isMaster();
+    void selectMasterMode(int buttonid);
   private:
+    void registerSlaves();
+    bool sendToDevice(int id, unsigned long data);
+    void doGroupRainbow();
     RF24 * radio;
     int myId;
     bool slavePresent[NUMBER_OF_DEVICES];
     int numberOfSlaves;
-    void registerSlaves();
+    int program;
+    int offset;
+    long timeout;
 };
 
 #endif

@@ -62,21 +62,21 @@ void setup() {
 
   /*attachInterrupt(PIN_IR_RECEIVER, ISR_infrared, CHANGE);
   infrared.attachreceiver(PIN_IR_RECEIVER, ISR_infrared);
-  infrared.attachtransmitter(PIN_IR_LED);
+  infrared.attachtransmitter(PIN_IR_LED);*/
 
   radio.begin();
   radio.setPALevel(RF24_PA_LOW);
   radio.openWritingPipe(ADDRESSES[myId]);
   radio.openReadingPipe(1, ADDRESSES[myId]);
-  radio.startListening();*/
+  radio.startListening();
 }
 
 void loop() {
   doKeypad();
   doSleeveBoard();
-  /*doInfraredReceive();
-  doSerialRead();
-  doRfReceive();*/
+  /*doInfraredReceive();*/
+  /*doSerialRead();*/
+  doRfReceive();
   if (program != NULL) {
     program->loop();
   }
@@ -93,6 +93,10 @@ void doKeypad() {
       default: break;
     }
     if (program != NULL) {
+      if (program->isMaster() && buttonid != 0) {
+        program->selectMasterMode(buttonid);
+        return;
+      }
       program->clear();
       delete program;
     }
@@ -108,8 +112,8 @@ void doKeypad() {
     if (program != NULL) {
       program->init(ledManager);
     }
-    Serial.print("keypad button: ");
-    Serial.println(buttonid);
+    /*Serial.print("keypad button: ");
+    Serial.println(buttonid);*/
   }
   controlpanel.updateinterrupt();
 }
@@ -121,8 +125,8 @@ void doSleeveBoard() {
       program->sleeve(buttonid);
     }
     infrared.sendmsg(buttonid);
-    Serial.print("sleeve button: ");
-    Serial.println(buttonid);
+    /*Serial.print("sleeve button: ");
+    Serial.println(buttonid);*/
   }
   sleevebuttons.updateinterrupt();
 }
@@ -166,7 +170,6 @@ void doRfReceive() {
         }
         break;
     }
-
   }
 }
 

@@ -27,3 +27,11 @@ void AbstractProgram::mode(char letter) {
 void AbstractProgram::rf(unsigned long data) {
   // do nothing
 }
+
+bool AbstractProgram::isMaster() {
+  return false;
+}
+
+void AbstractProgram::selectMasterMode(int buttonid) {
+  // do nothing
+}
