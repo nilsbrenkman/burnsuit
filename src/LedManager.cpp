@@ -9,6 +9,10 @@ LedManager::LedManager() {
   FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUMBER_OF_LEDS);
 }
 
+void LedManager::setLedStrip(int i, AbstractLedStrip * ls) {
+  ledStrip[i] = ls;
+}
+
 void LedManager::setLed(int i, CRGB color) {
   leds[i] = color;
 }

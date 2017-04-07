@@ -10,5 +10,6 @@ const String DEVICEIDS[4]= {"2d0055000851353531343431",  // mufasa
 const byte ADDRESSES[4][6] = {"mufas", "linqu", "simba", "jorie"};
 const int NUMBER_OF_DEVICES = 4;
 const int NUMBER_OF_LEDS = 4;
+const int NUMBER_OF_LEDSTRIPS = 2;
 
 #endif

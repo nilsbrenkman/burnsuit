@@ -12,6 +12,7 @@
 #include "particle-rf24.h"
 #include "Constants.h"
 #include "LedManager.h"
+#include "AbstractLedStrip.h"
 #include "AbstractProgram.h"
 #include "Program1.h"
 #include "Rainbow.h"
@@ -22,6 +23,7 @@
 
 AbstractProgram * program;
 LedManager * ledManager;
+/*AbstractLedStrip * ledStrips[NUMBER_OF_LEDSTRIPS];*/
 
 const int PIN_IR_RECEIVER = D7;
 const int PIN_IR_LED      = D2;
@@ -51,6 +53,15 @@ void setup() {
   }
 
   ledManager = new LedManager();
+  AbstractLedStrip * ledStrip;
+  ledStrip = new AbstractLedStrip(0, 2, false);
+  ledStrip->setLedManager(ledManager);
+  ledManager->setLedStrip(0, ledStrip);
+  /*ledStrips[0] = ledStrip;*/
+  ledStrip = new AbstractLedStrip(2, 2, true);
+  ledStrip->setLedManager(ledManager);
+  ledManager->setLedStrip(1, ledStrip);
+  /*ledStrips[1] = ledStrip;*/
 
   attachInterrupt(PIN_IR_RECEIVER, ISR_infrared, CHANGE);
   infrared.attachreceiver(PIN_IR_RECEIVER, ISR_infrared);
