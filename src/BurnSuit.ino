@@ -77,9 +77,9 @@ void setup() {
 void loop() {
   doKeypad();
   doSleeveBoard();
-  doInfraredReceive();
+  /*doInfraredReceive();
   doSerialRead();
-  doRfReceive();
+  doRfReceive();*/
   if (program != NULL) {
     program->loop();
   }
@@ -103,7 +103,7 @@ void doKeypad() {
       case 0: program = NULL;                      break;
       case 1: program = new Master(&radio, myId);  break;
       /*case 2: program = new Program1(200, LED); break;*/
-      case 3: program = new Rainbow(5);            break;
+      case 3: program = new Rainbow();             break;
       case 4: program = new ManualPulse();         break;
       case 5: program = new Sparkle();             break;
       default: break;

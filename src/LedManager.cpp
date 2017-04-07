@@ -21,8 +21,20 @@ void LedManager::clearAll() {
   for (int i = 0; i < NUMBER_OF_LEDS; i++) {
     leds[i] = CRGB::Black;
   }
+  FastLED.show();
+}
+
+void LedManager::setBrightness(int i) {
+  FastLED.setBrightness(i);
+  FastLED.show();
 }
 
 void LedManager::doProgramWithOffset(int program, int offset) {
-
+  for (int i = 0; i < NUMBER_OF_LEDSTRIPS; i++) {
+    switch (program) {
+      case 1: ledStrip[i]->doRainbow(offset); break;
+      default: break;
+    }
+  }
+  FastLED.show();
 }
