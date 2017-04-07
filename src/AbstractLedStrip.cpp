@@ -20,7 +20,7 @@ void AbstractLedStrip::setLed(int led, int color) {
 
 void AbstractLedStrip::doRainbow(int offset) {
   for (int i = 0; i < size; i++) {
-    int color = (i + offset) % 6;
+    int color = (6 - (i % 6) + offset) % 6;
     setLed(i, color + 2);
   }
 }
