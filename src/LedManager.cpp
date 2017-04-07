@@ -7,6 +7,7 @@
 
 LedManager::LedManager() {
   FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUMBER_OF_LEDS);
+  brightness = 5;
 }
 
 void LedManager::setLedStrip(int i, AbstractLedStrip * ls) {
@@ -35,8 +36,23 @@ void LedManager::setLedWithColor(int i, CRGB color) {
   leds[i] = color;
 }
 
-void LedManager::setBrightness(int i) {
-  FastLED.setBrightness(i);
+void LedManager::setBrightness(int b) {
+  FastLED.setBrightness(b);
+}
+
+void LedManager::setBrightnessPersistent(int b, bool relative) {
+  int newBrightness = b;
+  if (relative) {
+    newBrightness = brightness + b;
+  }
+  if (newBrightness < 1 || newBrightness > 5) {
+    return;
+  }
+  brightness = newBrightness;
+  Serial.print("brightness: ");
+  Serial.println(brightness);
+  setBrightness( pow((brightness / 5.0), 2) * 255 );
+  FastLED.show();
 }
 
 void LedManager::setAllLeds(int color) {
@@ -46,7 +62,7 @@ void LedManager::setAllLeds(int color) {
 }
 
 void LedManager::clearAll() {
-  FastLED.setBrightness(255);
+  setBrightnessPersistent(0, true);
   setAllLeds(0);
   FastLED.show();
 }

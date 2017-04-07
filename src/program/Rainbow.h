@@ -10,9 +10,7 @@ class Rainbow : public AbstractProgram {
     void loop();
     void sleeve(int buttonid);
   private:
-    void setBrightness(int b);
     int speed;
-    int brightness;
     long timeout;
     int offset;
 };

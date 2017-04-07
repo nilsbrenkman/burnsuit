@@ -121,8 +121,15 @@ void doKeypad() {
 void doSleeveBoard() {
   if (sleevebuttons.buttonpressed()) {
     int buttonid = sleevebuttons.getbutton();
-    if (program != NULL) {
-      program->sleeve(buttonid);
+    switch (buttonid) {
+      case 5: ledManager->setBrightnessPersistent(5, false); break;
+      case 6: ledManager->setBrightnessPersistent(1, true);  break;
+      case 7: ledManager->setBrightnessPersistent(-1, true); break;
+      default:
+        if (program != NULL) {
+          program->sleeve(buttonid);
+        }
+        break;
     }
     infrared.sendmsg(buttonid);
     /*Serial.print("sleeve button: ");

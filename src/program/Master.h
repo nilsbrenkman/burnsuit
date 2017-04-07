@@ -1,6 +1,7 @@
 #ifndef Master_H
 #define Master_H
 
+#include <math.h>
 #include "Constants.h"
 #include "AbstractProgram.h"
 #include "application.h"
@@ -25,6 +26,7 @@ class Master : public AbstractProgram {
     int program;
     int offset;
     long timeout;
+    int speed;
 };
 
 #endif

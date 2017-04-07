@@ -8,7 +8,8 @@ Master::Master(RF24 * r, int i) {
   for (int i = 0; i < NUMBER_OF_DEVICES; i++) {
     slavePresent[i] = false;
   }
-  int program = 0;
+  program = 0;
+  speed = 2;
 }
 
 void Master::loop() {
@@ -19,7 +20,12 @@ void Master::loop() {
 }
 
 void Master::sleeve(int buttonid) {
-  // do nothing
+  switch (buttonid) {
+    case 0: speed = 0;                  break;
+    case 1: if (speed > 0) { speed--; } break;
+    case 2: if (speed < 4) { speed++; } break;
+    default: break;
+  }
 }
 
 void Master::mode(char letter) {
@@ -43,6 +49,7 @@ void Master::selectMasterMode(int buttonid) {
       program = 3; // group rainbow
       timeout = 0;
       offset = 0;
+      speed = 2;
       break;
   }
 }
@@ -79,7 +86,6 @@ void Master::registerSlaves() {
 
 bool Master::sendToDevice(int id, unsigned long data) {
   radio->openWritingPipe(ADDRESSES[id]);
-  /*unsigned long data_send = (unsigned long) 1;*/
   return radio->write(&data, sizeof(unsigned long));
 }
 
@@ -104,7 +110,7 @@ void Master::doGroupRainbow() {
         color = (color + 1) % 6;
       }
     }
-    timeout = millis() + 400;
+    timeout = millis() + (200 * pow(2, speed));
     offset = (offset + 1) % 6;
   }
 }
