@@ -18,6 +18,7 @@ void LedManager::setLed(int i, CRGB color) {
 }
 
 void LedManager::clearAll() {
+  FastLED.setBrightness(255);
   for (int i = 0; i < NUMBER_OF_LEDS; i++) {
     leds[i] = CRGB::Black;
   }

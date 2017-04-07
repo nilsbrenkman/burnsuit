@@ -3,7 +3,6 @@
 
 #include "AbstractProgram.h"
 #include "application.h"
-#include "FastLED.h"
 
 FASTLED_USING_NAMESPACE;
 
@@ -15,7 +14,6 @@ class ManualPulse : public AbstractProgram {
     void sleeve(int buttonid);
     void infrared(int value);
   private:
-    CRGB leds[4];
     int speed;
 };
 

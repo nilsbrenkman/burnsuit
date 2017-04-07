@@ -3,7 +3,7 @@
 
 #include "AbstractProgram.h"
 #include "application.h"
-#include "FastLED.h"
+#include "Constants.h"
 
 FASTLED_USING_NAMESPACE;
 
@@ -17,7 +17,6 @@ class Sparkle : public AbstractProgram {
     void clear();
     void sleeve(int buttonid);
   private:
-    CRGB leds[4];
     int led;
     State state;
     Mode mode;

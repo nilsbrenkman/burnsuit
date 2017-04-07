@@ -3,7 +3,6 @@
 
 #include "AbstractProgram.h"
 #include "application.h"
-#include "FastLED.h"
 
 FASTLED_USING_NAMESPACE;
 
@@ -14,7 +13,6 @@ class Slave : public AbstractProgram {
     void clear();
     void sleeve(int buttonid);
   private:
-    CRGB leds[4];
     int brightness;
 };
 

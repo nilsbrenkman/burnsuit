@@ -23,7 +23,6 @@
 
 AbstractProgram * program;
 LedManager * ledManager;
-/*AbstractLedStrip * ledStrips[NUMBER_OF_LEDSTRIPS];*/
 
 const int PIN_IR_RECEIVER = D7;
 const int PIN_IR_LED      = D2;
@@ -57,13 +56,11 @@ void setup() {
   ledStrip = new AbstractLedStrip(0, 2, false);
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(0, ledStrip);
-  /*ledStrips[0] = ledStrip;*/
   ledStrip = new AbstractLedStrip(2, 2, true);
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(1, ledStrip);
-  /*ledStrips[1] = ledStrip;*/
 
-  attachInterrupt(PIN_IR_RECEIVER, ISR_infrared, CHANGE);
+  /*attachInterrupt(PIN_IR_RECEIVER, ISR_infrared, CHANGE);
   infrared.attachreceiver(PIN_IR_RECEIVER, ISR_infrared);
   infrared.attachtransmitter(PIN_IR_LED);
 
@@ -71,7 +68,7 @@ void setup() {
   radio.setPALevel(RF24_PA_LOW);
   radio.openWritingPipe(ADDRESSES[myId]);
   radio.openReadingPipe(1, ADDRESSES[myId]);
-  radio.startListening();
+  radio.startListening();*/
 }
 
 void loop() {

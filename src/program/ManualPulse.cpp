@@ -1,13 +1,7 @@
 #include "ManualPulse.h"
 
-#define CHIPSET APA102
-#define NUM_LEDS 4
-#define DATA_PIN A1
-#define CLOCK_PIN A0
-#define COLOR_ORDER BGR
-
 ManualPulse::ManualPulse() {
-  FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+
 }
 
 void ManualPulse::loop() {
@@ -19,7 +13,7 @@ void ManualPulse::clear() {
 }
 
 void ManualPulse::sleeve(int buttonid) {
-  for (int i = 0; i < NUM_LEDS; i++) {
+  /*for (int i = 0; i < NUM_LEDS; i++) {
     switch (buttonid) {
       case 5: leds[i] = CRGB::Red;    break;
       case 6: leds[i] = CRGB::Orange; break;
@@ -35,7 +29,7 @@ void ManualPulse::sleeve(int buttonid) {
   for (int i = 0; i < NUM_LEDS; i++) {
     leds[i] = CRGB::Black;
   }
-  FastLED.show();
+  FastLED.show();*/
 }
 
 void ManualPulse::infrared(int value) {
