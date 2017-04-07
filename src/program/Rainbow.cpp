@@ -9,7 +9,7 @@ Rainbow::Rainbow() {
 
 void Rainbow::loop() {
   if (timeout < millis()) {
-    ledManager->doProgramWithOffset(1, offset);
+    ledManager->doProgramWithOffset(1, offset, false);
     timeout = millis() + (50 * pow(2, speed));
     offset = (offset + 1) % 6;
   }

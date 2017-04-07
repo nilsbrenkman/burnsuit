@@ -24,3 +24,18 @@ void AbstractLedStrip::doRainbow(int offset) {
     setLed(i, color + 2);
   }
 }
+
+bool AbstractLedStrip::doExplosion(int offset) {
+  for (int i = 0; i < size; i++) {
+    if (i == offset || i == offset - 1) {
+      setLed(i, 2);
+    } else if (i == offset - 2 || i == offset - 3) {
+      setLed(i, 3);
+    } else if (i == offset - 4 || i == offset - 5) {
+      setLed(i, 4);
+    } else {
+      setLed(i, 0);
+    }
+  }
+  return (offset > size + 5);
+}

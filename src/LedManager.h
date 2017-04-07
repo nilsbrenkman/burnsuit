@@ -21,7 +21,7 @@ class LedManager {
     void setBrightnessPersistent(int b, bool relative);
     void setAllLeds(int color);
     void clearAll();
-    void doProgramWithOffset(int program, int offset);
+    bool doProgramWithOffset(int program, int offset, bool andOr);
   private:
     CRGB leds[NUMBER_OF_LEDS];
     AbstractLedStrip * ledStrip[NUMBER_OF_LEDSTRIPS];

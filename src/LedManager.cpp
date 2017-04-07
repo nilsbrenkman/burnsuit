@@ -62,17 +62,20 @@ void LedManager::setAllLeds(int color) {
 }
 
 void LedManager::clearAll() {
-  setBrightnessPersistent(0, true);
+  setBrightness( pow((brightness / 5.0), 2) * 255 );
   setAllLeds(0);
   FastLED.show();
 }
 
-void LedManager::doProgramWithOffset(int program, int offset) {
+bool LedManager::doProgramWithOffset(int program, int offset, bool andOr) {
+  bool done = andOr;
   for (int i = 0; i < NUMBER_OF_LEDSTRIPS; i++) {
     switch (program) {
-      case 1: ledStrip[i]->doRainbow(offset); break;
+      case 1: ledStrip[i]->doRainbow(offset);           break;
+      case 2: done &= ledStrip[i]->doExplosion(offset); break;
       default: break;
     }
   }
   FastLED.show();
+  return done;
 }

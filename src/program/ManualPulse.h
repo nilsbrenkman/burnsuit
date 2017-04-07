@@ -13,6 +13,7 @@ class ManualPulse : public AbstractProgram {
   private:
     int state;
     long nextEvent;
+    int offset;
 };
 
 #endif
