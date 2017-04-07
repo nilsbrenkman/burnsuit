@@ -5,11 +5,6 @@
 #include "application.h"
 #include "Constants.h"
 
-FASTLED_USING_NAMESPACE;
-
-enum State { on, off };
-enum Mode { white, color };
-
 class Sparkle : public AbstractProgram {
   public:
     Sparkle();
@@ -18,8 +13,8 @@ class Sparkle : public AbstractProgram {
     void sleeve(int buttonid);
   private:
     int led;
-    State state;
-    Mode mode;
+    int state;
+    int mode;
     long nextEvent;
 };
 

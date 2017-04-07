@@ -13,9 +13,11 @@ class LedManager {
   public:
     LedManager();
     void setLedStrip(int i, AbstractLedStrip * ledStrip);
-    void setLed(int i, CRGB color);
-    void clearAll();
+    void show();
+    void setLed(int led, int color);
+    void setLedWithColor(int led, CRGB color);
     void setBrightness(int i);
+    void clearAll();
     void doProgramWithOffset(int program, int offset);
   private:
     CRGB leds[NUMBER_OF_LEDS];

@@ -19,7 +19,7 @@ class AbstractLedStrip {
     int start;
     int size;
     int inverse;
-    void setLed(int i, CRGB color);
+    void setLed(int led, int color);
 };
 
 #endif

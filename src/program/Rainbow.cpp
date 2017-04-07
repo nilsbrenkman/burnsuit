@@ -1,6 +1,7 @@
 #include "Rainbow.h"
 
 Rainbow::Rainbow() {
+  Serial.println("Rainbow started");
   speed = 2; // 0-4, 0 being fast
   brightness = 5;
   timeout = 0;
@@ -36,4 +37,5 @@ void Rainbow::setBrightness(int b) {
   Serial.print("brightness: ");
   Serial.println(brightness);
   ledManager->setBrightness( pow((b / 5.0), 2) * 255 );
+  ledManager->show();
 }

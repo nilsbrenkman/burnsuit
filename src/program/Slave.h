@@ -4,8 +4,6 @@
 #include "AbstractProgram.h"
 #include "application.h"
 
-FASTLED_USING_NAMESPACE;
-
 class Slave : public AbstractProgram {
   public:
     Slave();

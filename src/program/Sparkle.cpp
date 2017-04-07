@@ -2,44 +2,38 @@
 
 Sparkle::Sparkle() {
   Serial.println("Sparkle started");
-  State state = off; // waiting for next Sparkle
-  Mode mode = white;
-  nextEvent = millis() + (rand() % 500);
+  state = 0; // waiting for next Sparkle
+  mode = 0;
+  nextEvent = 0;
 }
 
 void Sparkle::loop() {
   long now = millis();
   if (nextEvent < now) {
     switch (state) {
-      case off:
-        state = on;
+      case 0:
+        state = 1;
         led = rand() % NUMBER_OF_LEDS;
         switch (mode) {
-          case white:
-            ledManager->setLed(led, CRGB::White);
+          case 0:
+            ledManager->setLed(led, 1);
             break;
-          case color:
+          case 1:
             int c = rand() % 6;
-            switch (c) {
-              case 0: ledManager->setLed(led, CRGB::Red);    break;
-              case 1: ledManager->setLed(led, CRGB::Orange); break;
-              case 2: ledManager->setLed(led, CRGB::Yellow); break;
-              case 3: ledManager->setLed(led, CRGB::Green);  break;
-              case 4: ledManager->setLed(led, CRGB::Blue);   break;
-              case 5: ledManager->setLed(led, CRGB::Purple); break;
-            }
+            ledManager->setLed(led, c + 2);
             break;
         }
         nextEvent = now + 100;
         break;
-      case on:
-        state = off;
-        ledManager->setLed(led, CRGB::Black);
+      case 1:
+        state = 0;
+        ledManager->setLed(led, 0);
+        ledManager->show();
         nextEvent = now + (rand() % 500);
         break;
     }
   }
-  if (state == on) {
+  if (state == 1) {
     int t = nextEvent - now;
     if (t < 50) {
       ledManager->setBrightness(255 * t / 100);
@@ -47,6 +41,7 @@ void Sparkle::loop() {
       t = 100 - t;
       ledManager->setBrightness(255 * t / 100);
     }
+    ledManager->show();
   }
 }
 
@@ -56,8 +51,8 @@ void Sparkle::clear() {
 
 void Sparkle::sleeve(int buttonid) {
   switch (buttonid) {
-    case 3: mode = white; break;
-    case 4: mode = color; break;
+    case 3: mode = 0; break;
+    case 4: mode = 1; break;
     default: break;
   }
 }
