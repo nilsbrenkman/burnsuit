@@ -16,10 +16,6 @@ void Rainbow::loop() {
   }
 }
 
-void Rainbow::clear() {
-  ledManager->clearAll();
-}
-
 void Rainbow::sleeve(int buttonid) {
   switch (buttonid) {
     case 0: speed = 0;                  break;

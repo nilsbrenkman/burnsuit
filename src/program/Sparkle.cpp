@@ -45,10 +45,6 @@ void Sparkle::loop() {
   }
 }
 
-void Sparkle::clear() {
-  ledManager->clearAll();
-}
-
 void Sparkle::sleeve(int buttonid) {
   switch (buttonid) {
     case 3: mode = 0; break;

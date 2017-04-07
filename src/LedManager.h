@@ -17,6 +17,7 @@ class LedManager {
     void setLed(int led, int color);
     void setLedWithColor(int led, CRGB color);
     void setBrightness(int i);
+    void setAllLeds(int color);
     void clearAll();
     void doProgramWithOffset(int program, int offset);
   private:

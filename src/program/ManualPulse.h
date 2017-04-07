@@ -8,11 +8,11 @@ class ManualPulse : public AbstractProgram {
   public:
     ManualPulse();
     void loop();
-    void clear();
     void sleeve(int buttonid);
     void infrared(int value);
   private:
-    int speed;
+    int state;
+    long nextEvent;
 };
 
 #endif

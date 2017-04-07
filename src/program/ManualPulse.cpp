@@ -1,35 +1,28 @@
 #include "ManualPulse.h"
 
 ManualPulse::ManualPulse() {
-
+  state = 0;
+  nextEvent = 0;
 }
 
 void ManualPulse::loop() {
-  // do nothing
-}
-
-void ManualPulse::clear() {
-  // do nothing
+  if (state == 1) {
+    long now = millis();
+    if (nextEvent < now) {
+      ledManager->setAllLeds(0);
+      ledManager->show();
+      state = 0;
+    }
+  }
 }
 
 void ManualPulse::sleeve(int buttonid) {
-  /*for (int i = 0; i < NUM_LEDS; i++) {
-    switch (buttonid) {
-      case 5: leds[i] = CRGB::Red;    break;
-      case 6: leds[i] = CRGB::Orange; break;
-      case 7: leds[i] = CRGB::Yellow; break;
-      case 0: leds[i] = CRGB::Green;  break;
-      case 1: leds[i] = CRGB::Blue;   break;
-      case 2: leds[i] = CRGB::Purple; break;
-      default: break;
-    }
+  if (state == 0) {
+    ledManager->setAllLeds((buttonid + 5) % 8);
+    ledManager->show();
+    state = 1;
+    nextEvent = millis() + 200;
   }
-  FastLED.show();
-  delay(200);
-  for (int i = 0; i < NUM_LEDS; i++) {
-    leds[i] = CRGB::Black;
-  }
-  FastLED.show();*/
 }
 
 void ManualPulse::infrared(int value) {

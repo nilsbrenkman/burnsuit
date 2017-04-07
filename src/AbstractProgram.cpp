@@ -9,7 +9,7 @@ void AbstractProgram::loop() {
 }
 
 void AbstractProgram::clear() {
-  // do nothing
+  ledManager->clearAll();
 }
 
 void AbstractProgram::sleeve(int buttonid) {

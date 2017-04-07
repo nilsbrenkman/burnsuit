@@ -39,11 +39,15 @@ void LedManager::setBrightness(int i) {
   FastLED.setBrightness(i);
 }
 
+void LedManager::setAllLeds(int color) {
+  for (int i = 0; i < NUMBER_OF_LEDS; i++) {
+    setLed(i, color);
+  }
+}
+
 void LedManager::clearAll() {
   FastLED.setBrightness(255);
-  for (int i = 0; i < NUMBER_OF_LEDS; i++) {
-    leds[i] = CRGB::Black;
-  }
+  setAllLeds(0);
   FastLED.show();
 }
 

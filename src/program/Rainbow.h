@@ -8,7 +8,6 @@ class Rainbow : public AbstractProgram {
   public:
     Rainbow();
     void loop();
-    void clear();
     void sleeve(int buttonid);
   private:
     void setBrightness(int b);
