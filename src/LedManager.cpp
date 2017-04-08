@@ -72,8 +72,11 @@ bool LedManager::doProgramWithOffset(int program, int offset, bool andOr) {
   bool done = andOr;
   for (int i = 0; i < NUMBER_OF_LEDSTRIPS; i++) {
     switch (program) {
-      case 1: ledStrip[i]->doRainbow(offset);           break;
-      case 2: done &= ledStrip[i]->doExplosion(offset); break;
+      case 1: ledStrip[i]->doRainbow(offset); break;
+      case 2: done &= ledStrip[i]->doExplosion(offset, COLOR_SCHEME_RED);  break;
+      case 3: done &= ledStrip[i]->doExplosion(offset, COLOR_SCHEME_BLUE); break;
+      case 4: done &= ledStrip[i]->doImplosion(offset, COLOR_SCHEME_RED);  break;
+      case 5: done &= ledStrip[i]->doImplosion(offset, COLOR_SCHEME_BLUE); break;
       default: break;
     }
   }

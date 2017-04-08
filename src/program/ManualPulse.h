@@ -14,6 +14,7 @@ class ManualPulse : public AbstractProgram {
     int state;
     long nextEvent;
     int offset;
+    int color;
 };
 
 #endif

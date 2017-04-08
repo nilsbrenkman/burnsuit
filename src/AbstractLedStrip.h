@@ -14,7 +14,8 @@ class AbstractLedStrip {
     AbstractLedStrip(int start, int size, bool inverse);
     void setLedManager(LedManager * ledManager);
     void doRainbow(int offset);
-    bool doExplosion(int offset);
+    bool doExplosion(int offset, int const *colorScheme);
+    bool doImplosion(int offset, int const *colorScheme);
   protected:
     LedManager * ledManager;
     int start;
