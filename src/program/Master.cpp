@@ -1,8 +1,6 @@
 #include "Master.h"
 
-Master::Master(RF24 * r, int i) {
-  radio = r;
-  myId = i;
+Master::Master() {
   Serial.println("Master active");
   numberOfSlaves = 0;
   for (int i = 0; i < NUMBER_OF_DEVICES; i++) {
@@ -56,10 +54,10 @@ void Master::selectMasterMode(int buttonid) {
 
 void Master::registerSlaves() {
   numberOfSlaves = 0;
-  radio->stopListening();
+  int myId = ledManager->getMyId();
   for (int i = 0; i < NUMBER_OF_DEVICES; i++) {
     if (i != myId) {
-      if (sendToDevice(i, (unsigned long) 1)) {
+      if (ledManager->sendToDevice(i, 0, 0, 0)) {
         Serial.print("Device ");
         Serial.print(i);
         Serial.println(" is present!");
@@ -81,21 +79,15 @@ void Master::registerSlaves() {
   Serial.print("Found ");
   Serial.print(numberOfSlaves);
   Serial.println(" slaves.");
-  radio->startListening();
-}
-
-bool Master::sendToDevice(int id, unsigned long data) {
-  radio->openWritingPipe(ADDRESSES[id]);
-  return radio->write(&data, sizeof(unsigned long));
 }
 
 void Master::doGroupRainbow() {
   if (timeout < millis()) {
+    int myId = ledManager->getMyId();
     int color = offset;
     for(int i = 0; i < NUMBER_OF_DEVICES; i++) {
       if (slavePresent[i]) {
-        unsigned long data = 100 + color; // 100 for program, color for offset
-        if (sendToDevice(i, data)) {
+        if (ledManager->sendToDevice(i, 1, 1, color)) {
           color = (color + 1) % 6;
         } else {
           Serial.print("Device ");

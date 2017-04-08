@@ -5,8 +5,10 @@
 #define CLOCK_PIN A0
 #define COLOR_ORDER BGR
 
-LedManager::LedManager() {
+LedManager::LedManager(RF24 * r, int i) {
   FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUMBER_OF_LEDS);
+  radio = r;
+  myId = i;
   brightness = 5;
   myOrange = blend(CRGB::Orange, CRGB::Red, 100);
 }
@@ -82,4 +84,26 @@ bool LedManager::doProgramWithOffset(int program, int offset, bool andOr) {
   }
   FastLED.show();
   return done;
+}
+
+int LedManager::getMyId() {
+  return myId;
+}
+
+bool LedManager::sendToDevice(int deviceId, int data1, int data2, int data3) {
+  radio->stopListening();
+  radio->openWritingPipe(ADDRESSES[deviceId]);
+  unsigned long data = combineDataFields(data1, data2, data3);
+  bool result = radio->write(&data, sizeof(unsigned long));
+  radio->startListening();
+  return result;
+}
+
+unsigned long LedManager::combineDataFields(int data1, int data2, int data3) {
+  unsigned long data = 0;
+  data |= myId << 24 & 0xff000000;
+  data |= data1 << 16 & 0x00ff0000;
+  data |= data2 << 8 & 0x0000ff00;
+  data |= data3 & 0x000000ff;
+  return data;
 }

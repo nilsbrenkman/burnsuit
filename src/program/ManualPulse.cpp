@@ -23,7 +23,7 @@ void ManualPulse::loop() {
       if (ledManager->doProgramWithOffset(state + color, offset, true)) {
         state = 0;
       } else {
-        nextEvent = millis() + 400;
+        nextEvent = millis() + 50;
       }
     }
   }
@@ -36,14 +36,14 @@ void ManualPulse::sleeve(int buttonid) {
         offset = 0;
         color = (color + 1) % 2;
         ledManager->doProgramWithOffset(2 + color, offset, true);
-        nextEvent = millis() + 400;
+        nextEvent = millis() + 50;
         state = 2;
         break;
       case 4:   // implosion
         offset = 0;
         color = (color + 1) % 2;
         ledManager->doProgramWithOffset(4 + color, offset, true);
-        nextEvent = millis() + 400;
+        nextEvent = millis() + 50;
         state = 4;
         break;
       default:

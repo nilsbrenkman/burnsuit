@@ -7,7 +7,7 @@
 class Slave : public AbstractProgram {
   public:
     Slave();
-    void rf(unsigned long data);
+    void rf(int senderId, int data1, int data2, int data3);
   private:
     void doGroupRainbow(int offset);
 };

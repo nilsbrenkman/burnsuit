@@ -11,7 +11,7 @@ class AbstractProgram {
     virtual void sleeve(int buttonid);
     virtual void infrared(int value);
     virtual void mode(char letter);
-    virtual void rf(unsigned long data);
+    virtual void rf(int senderId, int data1, int data2, int data3);
     virtual bool isMaster();
     virtual void selectMasterMode(int buttonid);
   protected:

@@ -4,10 +4,9 @@ Slave::Slave() {
   Serial.println("Going into slave mode");
 }
 
-void Slave::rf(unsigned long data) {
-  int program = data / 100;
-  switch (program) {
-    case 1: doGroupRainbow(data % 100); break;
+void Slave::rf(int senderId, int data1, int data2, int data3) {
+  switch (data2) {
+    case 1: doGroupRainbow(data3); break;
     default: break;
   }
 }

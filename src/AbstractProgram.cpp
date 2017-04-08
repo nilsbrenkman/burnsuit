@@ -24,7 +24,7 @@ void AbstractProgram::mode(char letter) {
   // do nothing
 }
 
-void AbstractProgram::rf(unsigned long data) {
+void AbstractProgram::rf(int senderId, int data1, int data2, int data3) {
   // do nothing
 }
 

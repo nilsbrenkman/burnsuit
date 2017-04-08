@@ -2,6 +2,7 @@
 #define LedManager_H
 
 #include <math.h>
+#include "particle-rf24.h"
 #include "Constants.h"
 #include "AbstractLedStrip.h"
 #include "FastLED.h"
@@ -12,7 +13,7 @@ class AbstractLedStrip;
 
 class LedManager {
   public:
-    LedManager();
+    LedManager(RF24 * radio, int myId);
     void setLedStrip(int i, AbstractLedStrip * ledStrip);
     void show();
     void setLed(int led, int color);
@@ -22,10 +23,15 @@ class LedManager {
     void setAllLeds(int color);
     void clearAll();
     bool doProgramWithOffset(int program, int offset, bool andOr);
+    int getMyId();
+    bool sendToDevice(int deviceId, int data1, int data2, int data3);
   private:
+    unsigned long combineDataFields(int data1, int data2, int data3);
     CRGB leds[NUMBER_OF_LEDS];
     CRGB myOrange;
     AbstractLedStrip * ledStrip[NUMBER_OF_LEDSTRIPS];
+    RF24 * radio;
+    int myId;
     int brightness;
 };
 

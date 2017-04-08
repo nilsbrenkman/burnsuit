@@ -51,7 +51,7 @@ void setup() {
     }
   }
 
-  ledManager = new LedManager();
+  ledManager = new LedManager(&radio, myId);
   AbstractLedStrip * ledStrip;
   ledStrip = new AbstractLedStrip(0, 2, false);
   ledStrip->setLedManager(ledManager);
@@ -102,7 +102,7 @@ void doKeypad() {
     }
     switch (buttonid) {
       case 0: program = NULL;                      break;
-      case 1: program = new Master(&radio, myId);  break;
+      case 1: program = new Master();              break;
       /*case 2: program = new Program1(200, LED); break;*/
       case 3: program = new Rainbow();             break;
       case 4: program = new ManualPulse();         break;
@@ -162,8 +162,12 @@ void doRfReceive() {
       radio.read(&data, sizeof(unsigned long));
     }
     Serial.println(data);
-    switch (data) {
-      case 1:
+    int senderId = (data & 0xff000000) >> 24;
+    int data1 = (data & 0x00ff0000) >> 16;
+    int data2 = (data & 0x0000ff00) >> 8;
+    int data3 = (data & 0x000000ff);
+    switch (data1) {
+      case 0:
         if (program != NULL) {
           program->clear();
           delete program;
@@ -173,7 +177,7 @@ void doRfReceive() {
         break;
       default:
         if (program != NULL) {
-          program->rf(data);
+          program->rf(senderId, data1, data2, data3);
         }
         break;
     }
