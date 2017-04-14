@@ -12,18 +12,23 @@ class Master : public AbstractProgram {
     void loop();
     void sleeve(int buttonid);
     void mode(char letter);
+    void rf(int senderId, int data1, int data2, int data3);
     bool isMaster();
     void selectMasterMode(int buttonid);
   private:
     void registerSlaves();
     bool sendToDevice(int id, unsigned long data);
     void doGroupRainbow();
+    void doImplosionExplosion();
+    bool doEvent(int delay);
     bool slavePresent[NUMBER_OF_DEVICES];
     int numberOfSlaves;
     int program;
     int offset;
     long timeout;
     int speed;
+    int state;
+    int color;
 };
 
 #endif

@@ -23,6 +23,7 @@ class LedManager {
     void setAllLeds(int color);
     void clearAll();
     bool doProgramWithOffset(int program, int offset, bool andOr);
+    bool doProgramWithColorAndOffset(int program, int color, int offset, bool andOr);
     int getMyId();
     bool sendToDevice(int deviceId, int data1, int data2, int data3);
   private:

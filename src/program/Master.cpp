@@ -12,7 +12,8 @@ Master::Master() {
 
 void Master::loop() {
   switch (program) {
-    case 3: doGroupRainbow(); break;
+    case 2: doImplosionExplosion(); break;
+    case 3: doGroupRainbow();       break;
     default: break;
   }
 }
@@ -35,6 +36,17 @@ void Master::mode(char letter) {
   }
 }
 
+void Master::rf(int senderId, int data1, int data2, int data3) {
+  switch (program) {
+    case 2:
+      if (data1 == 0 && data2 == 1 && state == 1) {
+        state = 0;
+      }
+      break;
+    default: break;
+  }
+}
+
 bool Master::isMaster() {
   return true;
 }
@@ -43,6 +55,12 @@ void Master::selectMasterMode(int buttonid) {
   Serial.print("Selected Master mode: ");
   Serial.println(buttonid);
   switch (buttonid) {
+    case 2:
+      program = 2; // implosion/explosion
+      state = 0;
+      offset = 0;
+      color = 0;
+      break;
     case 3:
       program = 3; // group rainbow
       timeout = 0;
@@ -82,12 +100,12 @@ void Master::registerSlaves() {
 }
 
 void Master::doGroupRainbow() {
-  if (timeout < millis()) {
+  if (doEvent(200 * pow(2, speed))) {
     int myId = ledManager->getMyId();
     int color = offset;
-    for(int i = 0; i < NUMBER_OF_DEVICES; i++) {
+    for (int i = 0; i < NUMBER_OF_DEVICES; i++) {
       if (slavePresent[i]) {
-        if (ledManager->sendToDevice(i, 1, 1, color)) {
+        if (ledManager->sendToDevice(i, 1, 0, color)) {
           color = (color + 1) % 6;
         } else {
           Serial.print("Device ");
@@ -102,7 +120,62 @@ void Master::doGroupRainbow() {
         color = (color + 1) % 6;
       }
     }
-    timeout = millis() + (200 * pow(2, speed));
     offset = (offset + 1) % 6;
   }
+}
+
+void Master::doImplosionExplosion() {
+  switch (state) {
+    case 0:
+      if (slavePresent[offset]) {
+        if (ledManager->sendToDevice(offset, 2, 0, color)) {
+          state = 1;
+          color = (color + 1) % 2;
+          timeout = millis() + 10000; // wait 10 sec max
+        }
+      } else if (offset == ledManager->getMyId()) {
+        offset = 0;
+        state = 2;
+        return;
+      }
+      offset = (offset + 1) % NUMBER_OF_DEVICES;
+      break;
+    case 1:
+      if (doEvent(0)) {
+        state = 0;
+        offset = (offset + 1) % NUMBER_OF_DEVICES;
+      }
+      break;
+    case 2:
+      if (doEvent(500)) {
+        if (ledManager->doProgramWithColorAndOffset(3, color, offset, true)) {
+          state = 3;
+          offset = 0;
+          return;
+        }
+        offset++;
+      }
+      break;
+    case 3:
+      if (doEvent(500)) {
+        if (ledManager->doProgramWithColorAndOffset(2, color, offset, true)) {
+          state = 0;
+          color = (color + 1) % 2;
+          offset = (ledManager->getMyId() + 1) % NUMBER_OF_DEVICES;
+          return;
+        }
+        offset++;
+      }
+      break;
+    default: break;
+  }
+}
+
+bool Master::doEvent(int delay) {
+  long now = millis();
+  if (timeout < now) {
+    timeout = millis() + delay;
+    return true;
+  }
+  return false;
 }

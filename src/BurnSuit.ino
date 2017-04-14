@@ -47,13 +47,13 @@ void setup() {
 
   ledManager = new LedManager(&radio, myId);
   AbstractLedStrip * ledStrip;
-  /*ledStrip = new AbstractLedStrip(0, 2, false);
+  ledStrip = new AbstractLedStrip(0, 2, false);
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(0, ledStrip);
   ledStrip = new AbstractLedStrip(2, 2, true);
   ledStrip->setLedManager(ledManager);
-  ledManager->setLedStrip(1, ledStrip);*/
-  ledStrip = new AbstractLedStrip(0, 24, false);    // R1
+  ledManager->setLedStrip(1, ledStrip);
+  /*ledStrip = new AbstractLedStrip(0, 24, false);    // R1
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(0, ledStrip);
   ledStrip = new AbstractLedStrip(24, 38, true);    // R2
@@ -82,7 +82,7 @@ void setup() {
   ledManager->setLedStrip(8, ledStrip);
   ledStrip = new AbstractLedStrip(229, 25, true);   // LS
   ledStrip->setLedManager(ledManager);
-  ledManager->setLedStrip(9, ledStrip);
+  ledManager->setLedStrip(9, ledStrip);*/
 
   attachInterrupt(PIN_IR_RECEIVER, ISR_infrared, CHANGE);
   infrared.attachreceiver(PIN_IR_RECEIVER, ISR_infrared);
@@ -190,20 +190,17 @@ void doRfReceive() {
     int data1 =    (data & 0x00ff0000) >> 16;
     int data2 =    (data & 0x0000ff00) >>  8;
     int data3 =    (data & 0x000000ff)      ;
-    switch (data1) {
-      case 0:
-        if (program != NULL) {
-          program->clear();
-          delete program;
-        }
-        program = new Slave();
-        program->init(ledManager);
-        break;
-      default:
-        if (program != NULL) {
-          program->rf(senderId, data1, data2, data3);
-        }
-        break;
+    if (data1 == 0 && data2 == 0) {             // enter slave mode
+      if (program != NULL) {
+        program->clear();
+        delete program;
+      }
+      program = new Slave();
+      program->init(ledManager);
+      return;
+    }
+    if (program != NULL) {
+      program->rf(senderId, data1, data2, data3);
     }
   }
 }
