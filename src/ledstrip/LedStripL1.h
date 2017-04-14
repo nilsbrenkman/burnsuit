@@ -5,7 +5,7 @@
 
 class LedStripL1 : public AbstractLedStrip {
   public:
-    LedStripL1(int start, int size, bool inverse) : AbstractLedStrip(start, size, inverse) { }
+    LedStripL1(int start, int size, bool inverse, bool left, int position) : AbstractLedStrip(start, size, inverse, left, position) { }
 };
 
 #endif

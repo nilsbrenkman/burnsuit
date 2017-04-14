@@ -15,7 +15,7 @@ void ManualPulse::loop() {
       ledManager->show();
       state = 0;
     }
-  } else if (state == 2 || state == 3) {
+  } else if (state == 3 || state == 4) {
     if (doEvent(0)) {
       offset++;
       if (ledManager->doProgramWithColorAndOffset(state, color, offset, true)) {
@@ -32,17 +32,17 @@ void ManualPulse::sleeve(int buttonid) {
     switch (buttonid) {
       case 3:   // explosion
         offset = 0;
-        color = (color + 1) % 2;
-        ledManager->doProgramWithColorAndOffset(2, color, offset, true);
-        timeout = millis() + 50;
-        state = 2;
-        break;
-      case 4:   // implosion
-        offset = 0;
-        color = (color + 1) % 2;
+        color = (color + 1) % 3;
         ledManager->doProgramWithColorAndOffset(3, color, offset, true);
         timeout = millis() + 50;
         state = 3;
+        break;
+      case 4:   // implosion
+        offset = 0;
+        color = (color + 1) % 3;
+        ledManager->doProgramWithColorAndOffset(4, color, offset, true);
+        timeout = millis() + 50;
+        state = 4;
         break;
       default:
         ledManager->setAllLeds((buttonid + 5) % 8);

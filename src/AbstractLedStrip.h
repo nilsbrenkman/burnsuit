@@ -11,17 +11,20 @@ class LedManager;
 
 class AbstractLedStrip {
   public:
-    AbstractLedStrip(int start, int size, bool inverse);
+    AbstractLedStrip(int start, int size, bool inverse, bool left, int position);
     void setLedManager(LedManager * ledManager);
     void doRainbow(int offset);
+    void doGradient(int offset);
     bool doExplosion(int offset, int const *colorScheme);
     bool doImplosion(int offset, int const *colorScheme);
   protected:
+    void setLed(int led, int color);
     LedManager * ledManager;
     int start;
     int size;
     int inverse;
-    void setLed(int led, int color);
+    bool left;
+    int position;
 };
 
 #endif

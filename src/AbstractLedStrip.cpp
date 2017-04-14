@@ -1,9 +1,11 @@
 #include "AbstractLedStrip.h"
 
-AbstractLedStrip::AbstractLedStrip(int s, int l, bool inv) {
-  start = s;
-  size = l;
+AbstractLedStrip::AbstractLedStrip(int st, int si, bool inv, bool lf, int pos) {
+  start = st;
+  size = si;
   inverse = inv;
+  left = lf;
+  position = pos;
 }
 
 void AbstractLedStrip::setLedManager(LedManager * lm) {
@@ -23,6 +25,19 @@ void AbstractLedStrip::doRainbow(int offset) {
   for (int i = 0; i < size; i++) {
     int color = (6 - (i % 6) + offset) % 6;
     setLed(i, color + 2);
+  }
+}
+
+void AbstractLedStrip::doGradient(int offset) {
+  int hue = offset;
+  if (left) hue -= 5;
+  for (int i = 0; i < size; i++) {
+    if (inverse) {
+      ledManager->setLedWithHue(start + size - i - 1, hue);
+    } else {
+      ledManager->setLedWithHue(start + i, hue);
+    }
+    left ? hue -= 5 : hue += 5;
   }
 }
 

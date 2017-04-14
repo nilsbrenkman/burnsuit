@@ -47,42 +47,44 @@ void setup() {
 
   ledManager = new LedManager(&radio, myId);
   AbstractLedStrip * ledStrip;
-  ledStrip = new AbstractLedStrip(0, 2, false);
+  ledStrip = new AbstractLedStrip(0, 2, true,  true,  1);
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(0, ledStrip);
-  ledStrip = new AbstractLedStrip(2, 2, true);
+  ledStrip = new AbstractLedStrip(2, 2, false, false, 2);
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(1, ledStrip);
-  /*ledStrip = new AbstractLedStrip(0, 24, false);    // R1
+  /*
+  ledStrip = new AbstractLedStrip(0,   24, false, false, 1);  // R1
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(0, ledStrip);
-  ledStrip = new AbstractLedStrip(24, 38, true);    // R2
+  ledStrip = new AbstractLedStrip(24,  38, true,  false, 2);  // R2
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(1, ledStrip);
-  ledStrip = new AbstractLedStrip(62, 25, true);    // RS
+  ledStrip = new AbstractLedStrip(62,  25, true,  false, 0);  // RS
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(2, ledStrip);
-  ledStrip = new AbstractLedStrip(87, 20, true);    // R3
+  ledStrip = new AbstractLedStrip(87,  20, true,  false, 3);  // R3
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(3, ledStrip);
-  ledStrip = new AbstractLedStrip(107, 20, false);  // R4
+  ledStrip = new AbstractLedStrip(107, 20, false, false, 4);  // R4
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(4, ledStrip);
-  ledStrip = new AbstractLedStrip(127, 20, true);   // L4
+  ledStrip = new AbstractLedStrip(127, 20, true,  true,  4);  // L4
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(5, ledStrip);
-  ledStrip = new AbstractLedStrip(147, 20, false);  // L3
+  ledStrip = new AbstractLedStrip(147, 20, false, true,  3);  // L3
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(6, ledStrip);
-  ledStrip = new AbstractLedStrip(167, 24, true);   // L1
+  ledStrip = new AbstractLedStrip(167, 24, true,  true,  1);  // L1
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(7, ledStrip);
-  ledStrip = new AbstractLedStrip(189, 38, false);  // L2
+  ledStrip = new AbstractLedStrip(189, 38, false, true,  2);  // L2
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(8, ledStrip);
-  ledStrip = new AbstractLedStrip(229, 25, true);   // LS
+  ledStrip = new AbstractLedStrip(229, 25, true,  true,  0);  // LS
   ledStrip->setLedManager(ledManager);
-  ledManager->setLedStrip(9, ledStrip);*/
+  ledManager->setLedStrip(9, ledStrip);
+  */
 
   attachInterrupt(PIN_IR_RECEIVER, ISR_infrared, CHANGE);
   infrared.attachreceiver(PIN_IR_RECEIVER, ISR_infrared);

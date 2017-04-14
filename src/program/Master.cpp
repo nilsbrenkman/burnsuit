@@ -131,7 +131,7 @@ void Master::doImplosionExplosion() {
       if (slavePresent[offset]) {
         if (ledManager->sendToDevice(offset, 2, 0, color)) {
           state = 1;
-          color = (color + 1) % 2;
+          color = (color + 1) % 3;
           timeout = millis() + 10000; // wait 10 sec max
         }
       } else if (offset == ledManager->getMyId()) {
@@ -149,7 +149,7 @@ void Master::doImplosionExplosion() {
       break;
     case 2:
       if (doEvent(50)) {
-        if (ledManager->doProgramWithColorAndOffset(3, color, offset, true)) {
+        if (ledManager->doProgramWithColorAndOffset(4, color, offset, true)) {
           state = 3;
           offset = 0;
           return;
@@ -159,9 +159,9 @@ void Master::doImplosionExplosion() {
       break;
     case 3:
       if (doEvent(50)) {
-        if (ledManager->doProgramWithColorAndOffset(2, color, offset, true)) {
+        if (ledManager->doProgramWithColorAndOffset(3, color, offset, true)) {
           state = 0;
-          color = (color + 1) % 2;
+          color = (color + 1) % 3;
           offset = (ledManager->getMyId() + 1) % NUMBER_OF_DEVICES;
           return;
         }

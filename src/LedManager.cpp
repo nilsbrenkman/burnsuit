@@ -40,6 +40,14 @@ void LedManager::setLedWithColor(int i, CRGB color) {
   leds[i] = color;
 }
 
+void LedManager::setLedWithHue(int led, int hue) {
+  CHSV hsv;
+  hsv.hue = hue % 256;
+  hsv.val = 255;
+  hsv.sat = 240;
+  leds[led] = hsv;
+}
+
 void LedManager::setBrightness(int b) {
   FastLED.setBrightness(b);
 }
@@ -78,16 +86,18 @@ bool LedManager::doProgramWithOffset(int program, int offset, bool andOr) {
 bool LedManager::doProgramWithColorAndOffset(int program, int color, int offset, bool andOr) {
   int const *colorScheme;
   switch (color) {
-    case 0:  colorScheme = COLOR_SCHEME_RED;  break;
-    case 1:  colorScheme = COLOR_SCHEME_BLUE; break;
-    default: colorScheme = COLOR_SCHEME_BLUE; break;
+    case 0:  colorScheme = COLOR_SCHEME_RED;     break;
+    case 1:  colorScheme = COLOR_SCHEME_BLUE;    break;
+    case 2:  colorScheme = COLOR_SCHEME_RAINBOW; break;
+    default: colorScheme = COLOR_SCHEME_BLUE;    break;
   }
   bool done = andOr;
   for (int i = 0; i < NUMBER_OF_LEDSTRIPS; i++) {
     switch (program) {
-      case 1: ledStrip[i]->doRainbow(offset); break;
-      case 2: done &= ledStrip[i]->doExplosion(offset, colorScheme); break;
-      case 3: done &= ledStrip[i]->doImplosion(offset, colorScheme); break;
+      case 1: ledStrip[i]->doRainbow(offset);                        break;
+      case 2: ledStrip[i]->doGradient(offset);                       break;
+      case 3: done &= ledStrip[i]->doExplosion(offset, colorScheme); break;
+      case 4: done &= ledStrip[i]->doImplosion(offset, colorScheme); break;
       default: break;
     }
   }

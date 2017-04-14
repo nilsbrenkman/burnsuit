@@ -28,11 +28,11 @@ void Slave::doGroupRainbow(int offset) {
 
 void Slave::doImplosionExplosion() {
   if (doEvent(50)) {
-    if (state == 0 && ledManager->doProgramWithColorAndOffset(3, color, offset, true)) {
+    if (state == 0 && ledManager->doProgramWithColorAndOffset(4, color, offset, true)) {
       state = 1;
       offset = 0;
       return;
-    } else if (state == 1 && ledManager->doProgramWithColorAndOffset(2, color, offset, true)) {
+    } else if (state == 1 && ledManager->doProgramWithColorAndOffset(3, color, offset, true)) {
       ledManager->sendToDevice(master, 0, 1, 0);  // send done to master
       program = 0;
       return;
