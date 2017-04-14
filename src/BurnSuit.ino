@@ -1,10 +1,3 @@
-/*
-* Project BurnSuit
-* Description:
-* Author:
-* Date:
-*/
-
 #include <math.h>
 #include "PCF8574_keypad.h"
 #include "PCF8574_mombutt.h"
@@ -13,6 +6,7 @@
 #include "Constants.h"
 #include "LedManager.h"
 #include "AbstractLedStrip.h"
+#include "LedStripL1.h"
 #include "AbstractProgram.h"
 #include "Program1.h"
 #include "Rainbow.h"
@@ -33,9 +27,9 @@ int myId;
 int time_last_irmsg = 0;
 
 PCF8574_keypad controlpanel(D4, 0x27, ISR_controlpanel, 200, 100);
-void ISR_controlpanel() { controlpanel.ISR(); } //wrapper function
+void ISR_controlpanel() { controlpanel.ISR(); }   // wrapper function
 PCF8574_mombutt sleevebuttons (D5, 0x20, ISR_sleevebuttons, 150, 50);
-void ISR_sleevebuttons() { sleevebuttons.ISR(); } //wrapper function
+void ISR_sleevebuttons() { sleevebuttons.ISR(); } // wrapper function
 afrored infrared(IR_MSG_LENGTH, IR_CARRIER_FREQ);
 void ISR_infrared() { infrared.ISR(); }
 RF24 radio(A6, A2);
@@ -53,16 +47,46 @@ void setup() {
 
   ledManager = new LedManager(&radio, myId);
   AbstractLedStrip * ledStrip;
-  ledStrip = new AbstractLedStrip(0, 2, false);
+  /*ledStrip = new AbstractLedStrip(0, 2, false);
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(0, ledStrip);
   ledStrip = new AbstractLedStrip(2, 2, true);
   ledStrip->setLedManager(ledManager);
+  ledManager->setLedStrip(1, ledStrip);*/
+  ledStrip = new AbstractLedStrip(0, 24, false);    // R1
+  ledStrip->setLedManager(ledManager);
+  ledManager->setLedStrip(0, ledStrip);
+  ledStrip = new AbstractLedStrip(24, 38, true);    // R2
+  ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(1, ledStrip);
+  ledStrip = new AbstractLedStrip(62, 25, true);    // RS
+  ledStrip->setLedManager(ledManager);
+  ledManager->setLedStrip(2, ledStrip);
+  ledStrip = new AbstractLedStrip(87, 20, true);    // R3
+  ledStrip->setLedManager(ledManager);
+  ledManager->setLedStrip(3, ledStrip);
+  ledStrip = new AbstractLedStrip(107, 20, false);  // R4
+  ledStrip->setLedManager(ledManager);
+  ledManager->setLedStrip(4, ledStrip);
+  ledStrip = new AbstractLedStrip(127, 20, true);   // L4
+  ledStrip->setLedManager(ledManager);
+  ledManager->setLedStrip(5, ledStrip);
+  ledStrip = new AbstractLedStrip(147, 20, false);  // L3
+  ledStrip->setLedManager(ledManager);
+  ledManager->setLedStrip(6, ledStrip);
+  ledStrip = new AbstractLedStrip(167, 24, true);   // L1
+  ledStrip->setLedManager(ledManager);
+  ledManager->setLedStrip(7, ledStrip);
+  ledStrip = new AbstractLedStrip(189, 38, false);  // L2
+  ledStrip->setLedManager(ledManager);
+  ledManager->setLedStrip(8, ledStrip);
+  ledStrip = new AbstractLedStrip(229, 25, true);   // LS
+  ledStrip->setLedManager(ledManager);
+  ledManager->setLedStrip(9, ledStrip);
 
-  /*attachInterrupt(PIN_IR_RECEIVER, ISR_infrared, CHANGE);
+  attachInterrupt(PIN_IR_RECEIVER, ISR_infrared, CHANGE);
   infrared.attachreceiver(PIN_IR_RECEIVER, ISR_infrared);
-  infrared.attachtransmitter(PIN_IR_LED);*/
+  infrared.attachtransmitter(PIN_IR_LED);
 
   radio.begin();
   radio.setPALevel(RF24_PA_LOW);
@@ -74,7 +98,7 @@ void setup() {
 void loop() {
   doKeypad();
   doSleeveBoard();
-  /*doInfraredReceive();*/
+  doInfraredReceive();
   /*doSerialRead();*/
   doRfReceive();
   if (program != NULL) {
@@ -163,9 +187,9 @@ void doRfReceive() {
     }
     Serial.println(data);
     int senderId = (data & 0xff000000) >> 24;
-    int data1 = (data & 0x00ff0000) >> 16;
-    int data2 = (data & 0x0000ff00) >> 8;
-    int data3 = (data & 0x000000ff);
+    int data1 =    (data & 0x00ff0000) >> 16;
+    int data2 =    (data & 0x0000ff00) >>  8;
+    int data3 =    (data & 0x000000ff)      ;
     switch (data1) {
       case 0:
         if (program != NULL) {

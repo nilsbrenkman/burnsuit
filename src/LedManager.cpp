@@ -6,7 +6,8 @@
 #define COLOR_ORDER BGR
 
 LedManager::LedManager(RF24 * r, int i) {
-  FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUMBER_OF_LEDS);
+  FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUMBER_OF_LEDS)
+         .setCorrection(TypicalLEDStrip);
   radio = r;
   myId = i;
   brightness = 5;
@@ -101,9 +102,9 @@ bool LedManager::sendToDevice(int deviceId, int data1, int data2, int data3) {
 
 unsigned long LedManager::combineDataFields(int data1, int data2, int data3) {
   unsigned long data = 0;
-  data |= myId << 24 & 0xff000000;
+  data |= myId  << 24 & 0xff000000;
   data |= data1 << 16 & 0x00ff0000;
-  data |= data2 << 8 & 0x0000ff00;
-  data |= data3 & 0x000000ff;
+  data |= data2 <<  8 & 0x0000ff00;
+  data |= data3       & 0x000000ff;
   return data;
 }
