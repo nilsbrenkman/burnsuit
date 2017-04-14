@@ -78,9 +78,9 @@ bool LedManager::doProgramWithOffset(int program, int offset, bool andOr) {
 bool LedManager::doProgramWithColorAndOffset(int program, int color, int offset, bool andOr) {
   int const *colorScheme;
   switch (color) {
-    case 0:  colorScheme = COLOR_SCHEME_RED;   break;
-    case 1:  colorScheme = COLOR_SCHEME_BLUE); break;
-    default: colorScheme = COLOR_SCHEME_BLUE); break;
+    case 0:  colorScheme = COLOR_SCHEME_RED;  break;
+    case 1:  colorScheme = COLOR_SCHEME_BLUE; break;
+    default: colorScheme = COLOR_SCHEME_BLUE; break;
   }
   bool done = andOr;
   for (int i = 0; i < NUMBER_OF_LEDSTRIPS; i++) {

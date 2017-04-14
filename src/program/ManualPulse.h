@@ -10,11 +10,6 @@ class ManualPulse : public AbstractProgram {
     void loop();
     void sleeve(int buttonid);
     void infrared(int value);
-  private:
-    int state;
-    long nextEvent;
-    int offset;
-    int color;
 };
 
 #endif

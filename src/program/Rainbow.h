@@ -9,10 +9,6 @@ class Rainbow : public AbstractProgram {
     Rainbow();
     void loop();
     void sleeve(int buttonid);
-  private:
-    int speed;
-    long timeout;
-    int offset;
 };
 
 #endif

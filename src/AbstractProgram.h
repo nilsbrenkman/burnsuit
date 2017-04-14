@@ -15,7 +15,14 @@ class AbstractProgram {
     virtual bool isMaster();
     virtual void selectMasterMode(int buttonid);
   protected:
+    bool doEvent(int delay);
     LedManager * ledManager;
+    long timeout;
+    int program;
+    int state;
+    int offset;
+    int color;
+    int speed;
 };
 
 #endif

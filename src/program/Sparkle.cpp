@@ -4,12 +4,12 @@ Sparkle::Sparkle() {
   Serial.println("Sparkle started");
   state = 0; // waiting for next Sparkle
   mode = 0;
-  nextEvent = 0;
+  timeout = 0;
 }
 
 void Sparkle::loop() {
   long now = millis();
-  if (nextEvent < now) {
+  if (doEvent(0)) {
     switch (state) {
       case 0:
         state = 1;
@@ -23,18 +23,18 @@ void Sparkle::loop() {
             ledManager->setLed(led, c + 2);
             break;
         }
-        nextEvent = now + 100;
+        timeout = now + 100;
         break;
       case 1:
         state = 0;
         ledManager->setLed(led, 0);
         ledManager->show();
-        nextEvent = now + (rand() % 500);
+        timeout = now + (rand() % 500);
         break;
     }
   }
   if (state == 1) {
-    int t = nextEvent - now;
+    int t = timeout - now;
     if (t < 50) {
       ledManager->setBrightness(255 * t / 100);
     } else {

@@ -12,9 +12,7 @@ class Sparkle : public AbstractProgram {
     void sleeve(int buttonid);
   private:
     int led;
-    int state;
     int mode;
-    long nextEvent;
 };
 
 #endif

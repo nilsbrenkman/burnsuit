@@ -58,6 +58,7 @@ void Master::selectMasterMode(int buttonid) {
     case 2:
       program = 2; // implosion/explosion
       state = 0;
+      timeout = 0;
       offset = 0;
       color = 0;
       break;
@@ -147,7 +148,7 @@ void Master::doImplosionExplosion() {
       }
       break;
     case 2:
-      if (doEvent(500)) {
+      if (doEvent(50)) {
         if (ledManager->doProgramWithColorAndOffset(3, color, offset, true)) {
           state = 3;
           offset = 0;
@@ -157,7 +158,7 @@ void Master::doImplosionExplosion() {
       }
       break;
     case 3:
-      if (doEvent(500)) {
+      if (doEvent(50)) {
         if (ledManager->doProgramWithColorAndOffset(2, color, offset, true)) {
           state = 0;
           color = (color + 1) % 2;
@@ -169,13 +170,4 @@ void Master::doImplosionExplosion() {
       break;
     default: break;
   }
-}
-
-bool Master::doEvent(int delay) {
-  long now = millis();
-  if (timeout < now) {
-    timeout = millis() + delay;
-    return true;
-  }
-  return false;
 }

@@ -20,15 +20,8 @@ class Master : public AbstractProgram {
     bool sendToDevice(int id, unsigned long data);
     void doGroupRainbow();
     void doImplosionExplosion();
-    bool doEvent(int delay);
     bool slavePresent[NUMBER_OF_DEVICES];
     int numberOfSlaves;
-    int program;
-    int offset;
-    long timeout;
-    int speed;
-    int state;
-    int color;
 };
 
 #endif

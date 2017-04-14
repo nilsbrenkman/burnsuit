@@ -16,7 +16,7 @@ void Slave::rf(int senderId, int data1, int data2, int data3) {
   program = data1;
   switch (program) {
     case 1: doGroupRainbow(data3);  break;
-    case 2: offset = 0; nextEvent = 0; state = 0; color = data3; break;
+    case 2: offset = 0; timeout = 0; state = 0; color = data3; break;
     default: break;
   }
 }
@@ -39,13 +39,4 @@ void Slave::doImplosionExplosion() {
     }
     offset++;
   }
-}
-
-bool Slave::doEvent(int delay) {
-  long now = millis();
-  if (nextEvent < now) {
-    nextEvent = millis() + delay;
-    return true;
-  }
-  return false;
 }

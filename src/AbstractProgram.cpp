@@ -35,3 +35,12 @@ bool AbstractProgram::isMaster() {
 void AbstractProgram::selectMasterMode(int buttonid) {
   // do nothing
 }
+
+bool AbstractProgram::doEvent(int delay) {
+  long now = millis();
+  if (timeout < now) {
+    timeout = millis() + delay;
+    return true;
+  }
+  return false;
+}

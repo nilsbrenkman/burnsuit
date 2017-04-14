@@ -12,13 +12,7 @@ class Slave : public AbstractProgram {
   private:
     void doGroupRainbow(int offset);
     void doImplosionExplosion();
-    bool doEvent(int delay);
     int master;
-    int program;
-    int offset;
-    long nextEvent;
-    int state;
-    int color;
 };
 
 #endif

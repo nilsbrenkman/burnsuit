@@ -3,27 +3,25 @@
 ManualPulse::ManualPulse() {
   Serial.println("Manual mode");
   state = 0;
-  nextEvent = 0;
+  timeout = 0;
   offset = 0;
   color = 0;
 }
 
 void ManualPulse::loop() {
   if (state == 1) {
-    long now = millis();
-    if (nextEvent < now) {
+    if (doEvent(0)) {
       ledManager->setAllLeds(0);
       ledManager->show();
       state = 0;
     }
   } else if (state == 2 || state == 3) {
-    long now = millis();
-    if (nextEvent < now) {
+    if (doEvent(0)) {
       offset++;
       if (ledManager->doProgramWithColorAndOffset(state, color, offset, true)) {
         state = 0;
       } else {
-        nextEvent = millis() + 50;
+        timeout = millis() + 50;
       }
     }
   }
@@ -35,21 +33,21 @@ void ManualPulse::sleeve(int buttonid) {
       case 3:   // explosion
         offset = 0;
         color = (color + 1) % 2;
-        ledManager->doProgramWithOffset(2, color, offset, true);
-        nextEvent = millis() + 50;
+        ledManager->doProgramWithColorAndOffset(2, color, offset, true);
+        timeout = millis() + 50;
         state = 2;
         break;
       case 4:   // implosion
         offset = 0;
         color = (color + 1) % 2;
-        ledManager->doProgramWithOffset(3, color, offset, true);
-        nextEvent = millis() + 50;
-        state = 4;
+        ledManager->doProgramWithColorAndOffset(3, color, offset, true);
+        timeout = millis() + 50;
+        state = 3;
         break;
       default:
         ledManager->setAllLeds((buttonid + 5) % 8);
         ledManager->show();
-        nextEvent = millis() + 200;
+        timeout = millis() + 200;
         state = 1;
         break;
     }
