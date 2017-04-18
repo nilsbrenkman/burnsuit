@@ -6,10 +6,9 @@
 #include "Constants.h"
 #include "LedManager.h"
 #include "AbstractLedStrip.h"
-#include "LedStripL1.h"
 #include "AbstractProgram.h"
-#include "Program1.h"
 #include "Rainbow.h"
+#include "Random.h"
 #include "ManualPulse.h"
 #include "Sparkle.h"
 #include "Master.h"
@@ -120,12 +119,12 @@ void doKeypad() {
       delete program;
     }
     switch (buttonid) {
-      case 0: program = NULL;                      break;
-      case 1: program = new Master();              break;
-      /*case 2: program = new Program1(200, LED); break;*/
-      case 3: program = new Rainbow();             break;
-      case 4: program = new ManualPulse();         break;
-      case 5: program = new Sparkle();             break;
+      case 0: program = NULL;               break;
+      case 1: program = new Master();       break;
+      case 2: program = new Random();       break;
+      case 3: program = new Rainbow();      break;
+      case 4: program = new ManualPulse();  break;
+      case 5: program = new Sparkle();      break;
       default: break;
     }
     if (program != NULL) {

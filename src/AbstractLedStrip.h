@@ -18,6 +18,8 @@ class AbstractLedStrip {
     bool doExplosion(int offset, int const *colorScheme);
     bool doImplosion(int offset, int const *colorScheme);
     void doTrace(int offset, int const *colorScheme);
+    void doRandom(int offset);
+    bool doTraceWithTrail(int offset, int hue, bool programInverse);
   protected:
     void setLed(int led, int color);
     LedManager * ledManager;
@@ -26,6 +28,8 @@ class AbstractLedStrip {
     int inverse;
     bool left;
     int position;
+    int ledStripOffset;
+    bool ledStripInverse;
 };
 
 #endif

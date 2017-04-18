@@ -25,6 +25,8 @@ class LedManager {
     void clearAll();
     bool doProgramWithOffset(int program, int offset, bool andOr);
     bool doProgramWithColorAndOffset(int program, int color, int offset, bool andOr);
+    bool doTraceWithTrail(int strip, int offset, int hue, bool inverse);
+    void fadeToBlack();
     int getMyId();
     bool sendToDevice(int deviceId, int data1, int data2, int data3);
   private:

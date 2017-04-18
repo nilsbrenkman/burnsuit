@@ -99,11 +99,21 @@ bool LedManager::doProgramWithColorAndOffset(int program, int color, int offset,
       case 3: done &= ledStrip[i]->doExplosion(offset, colorScheme); break;
       case 4: done &= ledStrip[i]->doImplosion(offset, colorScheme); break;
       case 5: ledStrip[i]->doTrace(offset, colorScheme);             break;
+      case 6: ledStrip[i]->doRandom(offset);                         break;
       default: break;
     }
   }
   FastLED.show();
   return done;
+}
+
+bool LedManager::doTraceWithTrail(int strip, int offset, int hue, bool inverse) {
+  return ledStrip[strip]->doTraceWithTrail(offset, hue, inverse);
+}
+
+void LedManager::fadeToBlack() {
+  fadeToBlackBy(leds, NUMBER_OF_LEDS, 5);
+  FastLED.show();
 }
 
 int LedManager::getMyId() {
