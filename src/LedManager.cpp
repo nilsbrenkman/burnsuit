@@ -1,8 +1,8 @@
 #include "LedManager.h"
 
 #define CHIPSET APA102
-#define DATA_PIN A1
-#define CLOCK_PIN A0
+#define DATA_PIN TX
+#define CLOCK_PIN RX
 #define COLOR_ORDER BGR
 
 LedManager::LedManager(RF24 * r, int i) {
@@ -98,6 +98,7 @@ bool LedManager::doProgramWithColorAndOffset(int program, int color, int offset,
       case 2: ledStrip[i]->doGradient(offset);                       break;
       case 3: done &= ledStrip[i]->doExplosion(offset, colorScheme); break;
       case 4: done &= ledStrip[i]->doImplosion(offset, colorScheme); break;
+      case 5: ledStrip[i]->doTrace(offset, colorScheme);             break;
       default: break;
     }
   }

@@ -47,20 +47,14 @@ void setup() {
 
   ledManager = new LedManager(&radio, myId);
   AbstractLedStrip * ledStrip;
-  ledStrip = new AbstractLedStrip(0, 2, true,  true,  1);
-  ledStrip->setLedManager(ledManager);
-  ledManager->setLedStrip(0, ledStrip);
-  ledStrip = new AbstractLedStrip(2, 2, false, false, 2);
-  ledStrip->setLedManager(ledManager);
-  ledManager->setLedStrip(1, ledStrip);
-  /*
+
   ledStrip = new AbstractLedStrip(0,   24, false, false, 1);  // R1
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(0, ledStrip);
   ledStrip = new AbstractLedStrip(24,  38, true,  false, 2);  // R2
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(1, ledStrip);
-  ledStrip = new AbstractLedStrip(62,  25, true,  false, 0);  // RS
+  ledStrip = new AbstractLedStrip(62,  25, false, false, 0);  // RS
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(2, ledStrip);
   ledStrip = new AbstractLedStrip(87,  20, true,  false, 3);  // R3
@@ -81,10 +75,9 @@ void setup() {
   ledStrip = new AbstractLedStrip(189, 38, false, true,  2);  // L2
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(8, ledStrip);
-  ledStrip = new AbstractLedStrip(229, 25, true,  true,  0);  // LS
+  ledStrip = new AbstractLedStrip(229, 25, false, true,  0);  // LS
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(9, ledStrip);
-  */
 
   attachInterrupt(PIN_IR_RECEIVER, ISR_infrared, CHANGE);
   infrared.attachreceiver(PIN_IR_RECEIVER, ISR_infrared);

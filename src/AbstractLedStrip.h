@@ -17,6 +17,7 @@ class AbstractLedStrip {
     void doGradient(int offset);
     bool doExplosion(int offset, int const *colorScheme);
     bool doImplosion(int offset, int const *colorScheme);
+    void doTrace(int offset, int const *colorScheme);
   protected:
     void setLed(int led, int color);
     LedManager * ledManager;

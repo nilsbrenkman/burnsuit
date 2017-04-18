@@ -70,3 +70,32 @@ bool AbstractLedStrip::doImplosion(int offset, int const *colorScheme) {
   }
   return (offset > MAX_LEDS_PER_LEDSTRIP + colorSchemeSize - 2);
 }
+
+void AbstractLedStrip::doTrace(int offset, int const *colorScheme) {
+  int colorSchemeSize = colorScheme[0];
+  int ledStripOffset;
+  bool ledStripInverse;
+  if (position == 0) {
+    left ? ledStripOffset = 58 : ledStripOffset = 33;
+    left ? ledStripInverse = true : ledStripInverse = false;
+  } else if (position == 1) {
+    left ? ledStripOffset = 64 : ledStripOffset = 28;
+    left ? ledStripInverse = false : ledStripInverse = true;
+  } else if (position == 2) {
+    left ? ledStripOffset = 58 : ledStripOffset = 20;
+    left ? ledStripInverse = false : ledStripInverse = true;
+  } else if (position == 3 || position == 4) {
+    left ? ledStripOffset = 96 : ledStripOffset = 0;
+    left ? ledStripInverse = true : ledStripInverse = false;
+  }
+  for (int i = 0; i < size; i++) {
+    bool notSet = true;
+    for (int j = 0; j < colorSchemeSize; j++) {
+      if ((offset - ledStripOffset + 116) % 116 == i + j) {
+        ledStripInverse ? setLed(size - i - 1, colorScheme[j+1]) : setLed(i, colorScheme[j+1]);
+        notSet = false;
+      }
+    }
+    if (notSet) ledStripInverse ? setLed(size - i - 1, 0) : setLed(i, 0);
+  }
+}
