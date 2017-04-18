@@ -71,7 +71,7 @@ void setup() {
   ledStrip = new AbstractLedStrip(167, 24, true,  true,  1);  // L1
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(7, ledStrip);
-  ledStrip = new AbstractLedStrip(189, 38, false, true,  2);  // L2
+  ledStrip = new AbstractLedStrip(191, 38, false, true,  2);  // L2
   ledStrip->setLedManager(ledManager);
   ledManager->setLedStrip(8, ledStrip);
   ledStrip = new AbstractLedStrip(229, 25, false, true,  0);  // LS
