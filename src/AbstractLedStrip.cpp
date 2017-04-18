@@ -10,7 +10,7 @@ AbstractLedStrip::AbstractLedStrip(int st, int si, bool inv, bool lf, int pos) {
     left ? ledStripOffset = 58 : ledStripOffset = 33;
     left ? ledStripInverse = true : ledStripInverse = false;
   } else if (position == 1) {
-    left ? ledStripOffset = 64 : ledStripOffset = 28;
+    left ? ledStripOffset = 62 : ledStripOffset = 30;
     left ? ledStripInverse = false : ledStripInverse = true;
   } else if (position == 2) {
     left ? ledStripOffset = 58 : ledStripOffset = 20;
