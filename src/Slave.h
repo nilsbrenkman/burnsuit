@@ -12,6 +12,7 @@ class Slave : public AbstractProgram {
   private:
     void doGroupRainbow(int offset);
     void doImplosionExplosion();
+    void doManual();
     int master;
 };
 

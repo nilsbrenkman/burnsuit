@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include "particle-rf24.h"
+#include "afrored.h"
 #include "Constants.h"
 #include "AbstractLedStrip.h"
 #include "FastLED.h"
@@ -13,7 +14,7 @@ class AbstractLedStrip;
 
 class LedManager {
   public:
-    LedManager(RF24 * radio, int myId);
+    LedManager(RF24 * radio, afrored * infrared, int myId);
     void setLedStrip(int i, AbstractLedStrip * ledStrip);
     void show();
     void setLed(int led, int color);
@@ -29,12 +30,14 @@ class LedManager {
     void fadeToBlack();
     int getMyId();
     bool sendToDevice(int deviceId, int data1, int data2, int data3);
+    void sendInfrared(int data);
   private:
     unsigned long combineDataFields(int data1, int data2, int data3);
     CRGB leds[NUMBER_OF_LEDS];
     CRGB myOrange;
     AbstractLedStrip * ledStrip[NUMBER_OF_LEDSTRIPS];
     RF24 * radio;
+    afrored * infrared;
     int myId;
     int brightness;
 };

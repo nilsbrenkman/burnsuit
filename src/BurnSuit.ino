@@ -3,6 +3,7 @@
 #include "PCF8574_mombutt.h"
 #include "afrored.h"
 #include "particle-rf24.h"
+/*#include "MSGEQ7.h"*/
 #include "Constants.h"
 #include "LedManager.h"
 #include "AbstractLedStrip.h"
@@ -13,6 +14,9 @@
 #include "Sparkle.h"
 #include "Master.h"
 #include "Slave.h"
+#include "Beat.h"
+
+SYSTEM_MODE(MANUAL);
 
 AbstractProgram * program;
 LedManager * ledManager;
@@ -22,6 +26,10 @@ const int PIN_IR_LED      = D2;
 const int IR_MSG_LENGTH   = 8;
 const int IR_CARRIER_FREQ = 38000;
 const int ir_cooldown     = 100;
+/*const int PIN_MSGEQ7_RESET     = A7;
+const int PIN_MSGEQ7_STROBE    = A0;
+const int PIN_MSGEQ7_DATA      = A1;*/
+
 int myId;
 int time_last_irmsg = 0;
 
@@ -32,6 +40,7 @@ void ISR_sleevebuttons() { sleevebuttons.ISR(); } // wrapper function
 afrored infrared(IR_MSG_LENGTH, IR_CARRIER_FREQ);
 void ISR_infrared() { infrared.ISR(); }
 RF24 radio(A6, A2);
+/*MSGEQ7 sound(PIN_MSGEQ7_RESET, PIN_MSGEQ7_STROBE, PIN_MSGEQ7_DATA);*/
 
 void setup() {
   Serial.begin(9600);
@@ -44,7 +53,7 @@ void setup() {
     }
   }
 
-  ledManager = new LedManager(&radio, myId);
+  ledManager = new LedManager(&radio, &infrared, myId);
   AbstractLedStrip * ledStrip;
 
   ledStrip = new AbstractLedStrip(0,   24, false, false, 1);  // R1
@@ -93,7 +102,6 @@ void loop() {
   doKeypad();
   doSleeveBoard();
   doInfraredReceive();
-  /*doSerialRead();*/
   doRfReceive();
   if (program != NULL) {
     program->loop();
@@ -125,6 +133,7 @@ void doKeypad() {
       case 3: program = new Rainbow();      break;
       case 4: program = new ManualPulse();  break;
       case 5: program = new Sparkle();      break;
+      /*case 6: program = new Beat(&sound);   break;*/
       default: break;
     }
     if (program != NULL) {
@@ -149,7 +158,6 @@ void doSleeveBoard() {
         }
         break;
     }
-    infrared.sendmsg(buttonid);
     /*Serial.print("sleeve button: ");
     Serial.println(buttonid);*/
   }
@@ -179,11 +187,18 @@ void doRfReceive() {
     while (radio.available()) {
       radio.read(&data, sizeof(unsigned long));
     }
-    Serial.println(data);
     int senderId = (data & 0xff000000) >> 24;
     int data1 =    (data & 0x00ff0000) >> 16;
     int data2 =    (data & 0x0000ff00) >>  8;
     int data3 =    (data & 0x000000ff)      ;
+    Serial.print("Received RF: senderId=");
+    Serial.print(senderId);
+    Serial.print(" data1=");
+    Serial.print(data1);
+    Serial.print(" data2=");
+    Serial.print(data2);
+    Serial.print(" data3=");
+    Serial.println(data3);
     if (data1 == 0 && data2 == 0) {             // enter slave mode
       if (program != NULL) {
         program->clear();
@@ -195,23 +210,6 @@ void doRfReceive() {
     }
     if (program != NULL) {
       program->rf(senderId, data1, data2, data3);
-    }
-  }
-}
-
-void doSerialRead() {
-  if (Serial.available() > 0) {
-    int received = 0;
-    while (Serial.available() > 0) {
-      int byte = Serial.read();
-      if (byte != 10) {
-        received = (received * 10) + byte - 48;
-      }
-    }
-    Serial.print("Serial read: ");
-    Serial.println(received);
-    if (program != NULL) {
-      program->infrared(received);
     }
   }
 }

@@ -8,21 +8,27 @@ Master::Master() {
   }
   program = 0;
   speed = 2;
+  color = 0;
 }
 
 void Master::loop() {
   switch (program) {
     case 2: doImplosionExplosion(); break;
     case 3: doGroupRainbow();       break;
+    case 4: if (state != 0 && doEvent(100)) { doManual(0); } break;
     default: break;
   }
 }
 
 void Master::sleeve(int buttonid) {
   switch (buttonid) {
-    case 0: speed = 0;                  break;
-    case 1: if (speed > 0) { speed--; } break;
-    case 2: if (speed < 4) { speed++; } break;
+    case 0: color = 0; speed = 0;                  break;
+    case 1: color = 1; if (speed > 0) { speed--; } break;
+    case 2: color = 2; if (speed < 4) { speed++; } break;
+    case 3:
+    case 4:
+      if (program == 4) doManual(buttonid);
+      break;
     default: break;
   }
 }
@@ -68,6 +74,12 @@ void Master::selectMasterMode(int buttonid) {
       offset = 0;
       speed = 2;
       break;
+    case 4:
+      program = 4; // manual mode
+      state = 0;
+      timeout = 0;
+      color = 0;
+      break;
   }
 }
 
@@ -106,7 +118,7 @@ void Master::doGroupRainbow() {
     int color = offset;
     for (int i = 0; i < NUMBER_OF_DEVICES; i++) {
       if (slavePresent[i]) {
-        if (ledManager->sendToDevice(i, 1, 0, color)) {
+        if (ledManager->sendToDevice(i, program, 0, color)) {
           color = (color + 1) % 6;
         } else {
           Serial.print("Device ");
@@ -129,7 +141,7 @@ void Master::doImplosionExplosion() {
   switch (state) {
     case 0:
       if (slavePresent[offset]) {
-        if (ledManager->sendToDevice(offset, 2, 0, color)) {
+        if (ledManager->sendToDevice(offset, program, 0, color)) {
           state = 1;
           color = (color + 1) % 3;
           timeout = millis() + 10000; // wait 10 sec max
@@ -143,6 +155,7 @@ void Master::doImplosionExplosion() {
       break;
     case 1:
       if (doEvent(0)) {
+        Serial.println("This is taking too long, proceeding with next suit.");
         state = 0;
         offset = (offset + 1) % NUMBER_OF_DEVICES;
       }
@@ -167,6 +180,54 @@ void Master::doImplosionExplosion() {
         }
         offset++;
       }
+      break;
+    default: break;
+  }
+}
+
+void Master::doManual(int buttonid) {
+  switch (state) {
+    case 0:
+      for (int i = 0; i < NUMBER_OF_DEVICES; i++) {
+        if (slavePresent[i]) {
+          ledManager->sendToDevice(i, program, buttonid, color);
+        }
+      }
+      timeout = 0;
+      offset = 0;
+      state = buttonid;
+      break;
+    case 2:
+      if (ledManager->doProgramWithColorAndOffset(3, color, offset, true)) {
+        state = 0;
+        return;
+      }
+      offset++;
+      break;
+    case 3:
+      if (ledManager->doProgramWithColorAndOffset(4, color, offset, true)) {
+        state = 2;
+        offset = 0;
+        return;
+      }
+      offset++;
+      break;
+    case 4:
+      int const *colorScheme;
+      switch (color) {
+        case 0:  colorScheme = COLOR_SCHEME_RED;     break;
+        case 1:  colorScheme = COLOR_SCHEME_BLUE;    break;
+        case 2:  colorScheme = COLOR_SCHEME_RAINBOW; break;
+        default: colorScheme = COLOR_SCHEME_BLUE;    break;
+      }
+      if (offset < colorScheme[0]) {
+        offset++;
+        ledManager->setAllLeds(colorScheme[offset]);
+      } else {
+        ledManager->setAllLeds(0);
+        state = 0;
+      }
+      ledManager->show();
       break;
     default: break;
   }

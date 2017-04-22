@@ -20,6 +20,7 @@ class Master : public AbstractProgram {
     bool sendToDevice(int id, unsigned long data);
     void doGroupRainbow();
     void doImplosionExplosion();
+    void doManual(int buttonid);
     bool slavePresent[NUMBER_OF_DEVICES];
     int numberOfSlaves;
 };

@@ -1,3 +1,5 @@
+#ifndef Afrored_H
+#define Afrored_H
 
 /*
 Infrared sender-receiver library using a simple pulse-length based protocol
@@ -51,3 +53,5 @@ class afrored
   void updateISR();
 
 };
+
+#endif
