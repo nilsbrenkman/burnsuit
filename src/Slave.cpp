@@ -44,7 +44,7 @@ void Slave::doImplosionExplosion() {
 }
 
 void Slave::doManual() {
-  if (doEvent(100)) {
+  if (doEvent(50)) {
     switch (state) {
       case 2:
         if (ledManager->doProgramWithColorAndOffset(3, color, offset, true)) {

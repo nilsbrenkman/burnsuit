@@ -57,7 +57,6 @@ void ManualPulse::sleeve(int buttonid) {
       state = 1;
       break;
   }
-  ledManager->sendInfrared(buttonid);
 }
 
 void ManualPulse::infrared(int value) {

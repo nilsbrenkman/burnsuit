@@ -25,7 +25,8 @@ const int MIN_LEDS_PER_LEDSTRIP = 20;
 const int MAX_LEDS_PER_LEDSTRIP = 38;
 
 const int COLOR_SCHEME_RED[7] =     {6, 2, 2, 3, 3, 4, 4}; // first integer is size
-const int COLOR_SCHEME_BLUE[3] =    {2, 6, 7};
+const int COLOR_SCHEME_BLUE[5] =    {4, 6, 6, 7, 7};
 const int COLOR_SCHEME_RAINBOW[7] = {6, 2, 3, 4, 5, 6, 7};
+const int COLOR_SCHEME_BLUE_2[13] = {12, 6, 7, 6, 7, 6, 7, 6, 7, 6, 7, 6, 7};
 
 #endif

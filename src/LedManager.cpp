@@ -5,11 +5,10 @@
 #define CLOCK_PIN A7
 #define COLOR_ORDER BGR
 
-LedManager::LedManager(RF24 * rf, afrored * ir, int i) {
+LedManager::LedManager(RF24 * rf, int i) {
   FastLED.addLeds<CHIPSET, DATA_PIN, CLOCK_PIN, COLOR_ORDER, DATA_RATE_MHZ(2)>(leds, NUMBER_OF_LEDS)
          .setCorrection(TypicalLEDStrip);
   radio = rf;
-  infrared = ir;
   myId = i;
   brightness = 5;
   myOrange = blend(CRGB::Orange, CRGB::Red, 100);
@@ -137,10 +136,4 @@ unsigned long LedManager::combineDataFields(int data1, int data2, int data3) {
   data |= data2 <<  8 & 0x0000ff00;
   data |= data3       & 0x000000ff;
   return data;
-}
-
-void LedManager::sendInfrared(int data) {
-  Serial.print("Infrared out: ");
-  Serial.println(data);
-  infrared->sendmsg(data);
 }

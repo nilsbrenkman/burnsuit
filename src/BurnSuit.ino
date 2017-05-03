@@ -53,7 +53,7 @@ void setup() {
     }
   }
 
-  ledManager = new LedManager(&radio, &infrared, myId);
+  ledManager = new LedManager(&radio, myId);
   AbstractLedStrip * ledStrip;
 
   ledStrip = new AbstractLedStrip(0,   24, false, false, 1);  // R1
@@ -92,7 +92,7 @@ void setup() {
   infrared.attachtransmitter(PIN_IR_LED);
 
   radio.begin();
-  radio.setPALevel(RF24_PA_LOW);
+  radio.setPALevel(RF24_PA_MAX);
   radio.openWritingPipe(ADDRESSES[myId]);
   radio.openReadingPipe(1, ADDRESSES[myId]);
   radio.startListening();
@@ -112,6 +112,8 @@ void doKeypad() {
   if (controlpanel.buttonpressed()) {
     int buttonid = controlpanel.getbutton();
     switch (buttonid) {
+      case 10:  ledManager->setBrightnessPersistent(-1, true); return;
+      case 11:  ledManager->setBrightnessPersistent(1, true);  return;
       case 12:  if (program != NULL) { program->mode('A'); } return;
       case 13:  if (program != NULL) { program->mode('B'); } return;
       case 14:  if (program != NULL) { program->mode('C'); } return;
@@ -149,9 +151,13 @@ void doSleeveBoard() {
   if (sleevebuttons.buttonpressed()) {
     int buttonid = sleevebuttons.getbutton();
     switch (buttonid) {
-      case 5: ledManager->setBrightnessPersistent(5, false); break;
-      case 6: ledManager->setBrightnessPersistent(1, true);  break;
-      case 7: ledManager->setBrightnessPersistent(-1, true); break;
+      case 5:
+      case 6:
+      case 7:
+        Serial.print("Infrared out: ");
+        Serial.println(buttonid);
+        infrared.sendmsg(buttonid);
+        break;
       default:
         if (program != NULL) {
           program->sleeve(buttonid);
@@ -168,11 +174,14 @@ void doInfraredReceive() {
   if (infrared.isnewmsg) {
     if (infrared.checkmsg()) {
       int data = infrared.getmsg();
-      if (program != NULL) {
-        program->infrared(data);
-      }
       Serial.print("Infrared in: ");
       Serial.println(data);
+      switch (data) {
+        case 5: doExplosion();  break;
+        case 6: doFullScheme(); break;
+        case 7: doSnake();      break;
+        default: break;
+      }
       time_last_irmsg = millis();
     }
   }
@@ -212,4 +221,36 @@ void doRfReceive() {
       program->rf(senderId, data1, data2, data3);
     }
   }
+}
+
+void doExplosion() {
+  int offset = 0;
+  while (! ledManager->doProgramWithColorAndOffset(3, 1, offset, true)) {
+    offset++;
+    delay(15);
+  }
+  ledManager->setAllLeds(0);
+  ledManager->show();
+}
+
+void doFullScheme() {
+  int offset = 0;
+  int const *colorScheme = COLOR_SCHEME_BLUE_2;
+  while (offset < colorScheme[0]) {
+    offset++;
+    ledManager->setAllLeds(colorScheme[offset]);
+    ledManager->show();
+    delay(50);
+  }
+  ledManager->setAllLeds(0);
+  ledManager->show();
+}
+
+void doSnake() {
+  for (int i = 0; i < 232; i++) {
+    ledManager->doProgramWithColorAndOffset(5, 1, i % 116, false);
+    delay(5);
+  }
+  ledManager->setAllLeds(0);
+  ledManager->show();
 }

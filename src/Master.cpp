@@ -15,7 +15,7 @@ void Master::loop() {
   switch (program) {
     case 2: doImplosionExplosion(); break;
     case 3: doGroupRainbow();       break;
-    case 4: if (state != 0 && doEvent(100)) { doManual(0); } break;
+    case 4: if (state != 0 && doEvent(50)) { doManual(0); } break;
     default: break;
   }
 }
@@ -144,7 +144,7 @@ void Master::doImplosionExplosion() {
         if (ledManager->sendToDevice(offset, program, 0, color)) {
           state = 1;
           color = (color + 1) % 3;
-          timeout = millis() + 10000; // wait 10 sec max
+          timeout = millis() + 5000; // wait 10 sec max
         }
       } else if (offset == ledManager->getMyId()) {
         offset = 0;
